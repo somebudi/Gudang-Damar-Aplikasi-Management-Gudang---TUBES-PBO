@@ -1,4 +1,4 @@
-Aplikasi Gudang Damar Dari Kelompok 5 (Para Manusia Sigma) \n
+Aplikasi Gudang Damar Dari Kelompok 5 (Para Manusia Sigma)
 
 List Anggota
 - Devo Ghassan Savero dengan nickname saverodeco
