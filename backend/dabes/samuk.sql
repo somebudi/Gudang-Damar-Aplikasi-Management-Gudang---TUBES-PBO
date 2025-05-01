@@ -30,7 +30,6 @@ SET time_zone = "+00:00";
 CREATE TABLE `admin` (
   `ID_Admin` int(5) NOT NULL,
   `Nama` varchar(20) NOT NULL,
-  `No_Telpon` char(13) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 -- --------------------------------------------------------
@@ -62,36 +61,6 @@ CREATE TABLE `barang` (
   `Jumlah` int(11) NOT NULL,
   `Total` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `bulat`
---
-
-CREATE TABLE `bulat` (
-  `ID_Bulat` int(11) NOT NULL,
-  `ID_pesan` int(11) NOT NULL,
-  `Φ` int(11) NOT NULL,
-  `T` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
---
--- Table structure for table `kotak`
---
-
-CREATE TABLE `kotak` (
-  `ID_Kotak` int(11) NOT NULL,
-  `P` int(11) NOT NULL,
-  `L` int(11) NOT NULL,
-  `T` int(11) NOT NULL,
-  `ID_Pesanan` int(11) NOT NULL
-) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
-
--- --------------------------------------------------------
-
 --
 -- Table structure for table `pesanan`
 --
