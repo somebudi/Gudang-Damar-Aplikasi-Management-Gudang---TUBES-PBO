@@ -1,17 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Form User</title>
+  <meta charset="UTF-8" />
+  <title>SPA Gudang</title>
 </head>
 <body>
-  <form id="userForm">
-    <input type="text" name="name" placeholder="Nama" required>
-    <input type="email" name="email" placeholder="Email" required>
-    <button type="submit">Kirim</button>
-  </form>
+  <div id="navbar"></div> <!-- Navbar dimuat di sini -->
+  <div id="app">Loading...</div> <!-- Konten dinamis dimuat di sini -->
 
-  <script src="login.js"></script>
+  <!-- Skrip routing utama -->
+  <script type="module" src="router.js"></script>
 </body>
 </html>
