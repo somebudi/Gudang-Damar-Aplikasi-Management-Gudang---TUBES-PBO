@@ -1,13 +1,32 @@
-<h1>Selamat datang di halaman rumah</h1>
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Login - Gudang Damar</title>
+  <link rel="stylesheet" href="Login.css">
+</head>
+<body>
+  <div class="background"></div>
 
-<form id="userForm">
-  <input type="text" name="name" placeholder="Nama" required />
-  <input type="email" name="email" placeholder="Email" required />
-  <button type="submit">Kirim</button>
-</form>
+  <div class="login-container">
+    <h1>GUDANG DAMAR</h1>
+    <p>Sistem Manajemen Penyimpanan</p>
+    <div class="login-box">
+      <form>
+        <label>
+          <span>👤</span>
+          <input type="text" placeholder="Nama user" required>
+        </label>
+        <label>
+          <span>🔒</span>
+          <input type="password" placeholder="Sandi" required>
+        </label>
+        <button type="submit">Masuk</button>
+      </form>
+    </div>
+  </div>
 
-<!-- Tombol navigasi di luar form -->
-<button onclick="navigate('halamanGudangBeranda')">Beranda</button>
-
-<link rel="stylesheet" href="../styles/login.css">
-<script src="../scripts/login.js"></script>
+  <script src="Login.js"></script>
+</body>
+</html>
