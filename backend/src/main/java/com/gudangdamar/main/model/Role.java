@@ -14,7 +14,7 @@ public abstract class Role{
         this.Role = Role;
     }
     public void CekStatus(String Username,String role){
-        a;
+        
     }
     protected abstract void hakAkses(User user);
 }
