@@ -1,0 +1,33 @@
+header {
+    background-color: #66ACE6;
+    padding: 5px;
+    color: white;
+    display: flex;
+    overflow: hidden;
+    margin-top: -10px;
+    margin-left: -10px;
+    white-space: nowrap;
+}
+
+.logo{
+    display: inline;
+    float: left;
+    margin-left: 25px;
+}
+
+nav ul {
+    display: flex;
+    margin-left: 60%;
+    align-content: end;
+    text-align: right;
+    padding: 0;
+}
+
+menu{
+    text-align: right;
+}
+
+nav li {
+    display: inline;
+    margin: 0 15px;
+}
