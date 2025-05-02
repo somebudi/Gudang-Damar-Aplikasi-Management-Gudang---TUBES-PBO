@@ -3,7 +3,6 @@ package com.gudangdamar.main.model;
 public class kasir extends Role {
     private String username;
     private String password;
-    private String Role;
 
     public kasir(String username, String password, String Role) {
         super(Role);
@@ -25,12 +24,6 @@ public class kasir extends Role {
     }
     public void setpassword(String password){
         this.password=password;
-    }
-    public String getRole(){
-        return Role;
-    }
-    public void setRole(String Role){
-        this.Role=Role;
     }
     @Override
     public void hakAkses(User user) {
