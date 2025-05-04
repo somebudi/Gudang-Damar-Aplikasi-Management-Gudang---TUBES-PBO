@@ -4,14 +4,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
-    <title>Gudang Damar</title>
-</head>
+    </head>
 <body>
-    <iframe src="../navbar.html" width="100%" height="100px"></iframe>
-    <button >Tambah Jenis Barang</button>
+    <div id="navbar"></div>
+
+    <button id="addItemButton">Tambah Jenis Barang</button>
+
     <main>
         <div class="grid-container">
-            <div class="item" id="featured-item">
+            <div class="item">
                 <p>Gumpalan Pink</p>
                 <p>Merek: Oogway</p>
                 <p>Ukuran: 1km</p>
@@ -19,9 +20,10 @@
                 <p>Bahan 🌊</p>
             </div>
         </div>
-        
+
+        <!-- Replikasi grid-item jika diperlukan -->
         <div class="grid-container">
-            <div class="item" id="featured-item">
+            <div class="item">
                 <p>Gumpalan Pink</p>
                 <p>Merek: Oogway</p>
                 <p>Ukuran: 1km</p>
@@ -29,69 +31,31 @@
                 <p>Bahan 🌊</p>
             </div>
         </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
-        <div class="grid-container">
-            <div class="item" id="featured-item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div>
+
+        <!-- Anda bisa terus menambah grid-container sesuai kebutuhan -->
     </main>
+
+    <script type="module">
+        // Memuat navbar menggunakan fetch
+        async function loadNavbar() {
+            try {
+                const navbarRes = await fetch('navbar.html');
+                const navbarHtml = await navbarRes.text();
+                document.getElementById('navbar').innerHTML = navbarHtml;
+            } catch (err) {
+                console.error('Gagal memuat navbar:', err);
+            }
+        }
+
+        // Cek jika halaman telah dimuat
+        document.addEventListener('DOMContentLoaded', function () {
+            loadNavbar();
+
+            // Event listener untuk tombol tambah item
+            document.getElementById('addItemButton').addEventListener('click', function () {
+                alert('Fitur tambah item belum tersedia.');
+            });
+        });
+    </script>
 </body>
 </html>
