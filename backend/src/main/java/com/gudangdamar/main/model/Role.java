@@ -11,7 +11,7 @@ public abstract class Role{
         return Role;
     }
     public void setRole(String role) {
-        this.Role = Role;
+        this.Role = role;
     }
     public void CekStatus(String Username,String role){
         

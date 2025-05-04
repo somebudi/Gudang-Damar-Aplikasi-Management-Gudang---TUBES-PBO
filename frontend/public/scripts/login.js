@@ -1,32 +1,39 @@
-async function kirimForm(event) {
-    event.preventDefault(); // Mencegah submit default
-  
-    const data = {
-      name: document.querySelector('input[name="name"]').value,
-      email: document.querySelector('input[name="email"]').value
-    };
-  
-    console.log("Data yang dikirim:", data);
-  
+import { navigate } from './router.js';
+
+document.addEventListener('DOMContentLoaded', function () {
+  const form = document.querySelector('form');
+  const usernameInput = form.querySelector('input[type="text"]');
+  const passwordInput = form.querySelector('input[type="password"]');
+
+  form.addEventListener('submit', async function (e) {
+    e.preventDefault();
+
+    const username = usernameInput.value.trim();
+    const password = passwordInput.value.trim();
+
     try {
-      const res = await fetch('http://localhost:8080/users', { // Arahkan ke backend Java!
+      const response = await fetch('http://localhost:8080/login', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
         },
-        body: JSON.stringify(data)
+        body: JSON.stringify({ username, password })
       });
-  
-      const text = await res.text();
-      alert("Server bilang: " + text);
+
+      const data = await response.json();
+
+      if (response.ok) {
+        localStorage.setItem('loggedIn', 'true');
+        location.assign('halamanGudangBeranda.html');
+
+        alert('Login berhasil!');
+        
+      } else {
+        alert('Login gagal: ' + (data.message || 'Unknown error'));
+      }
     } catch (err) {
-      console.error("Fetch error:", err);
-      alert("Gagal kirim data ke server!");
+      console.error('Error:', err);
+      alert('Terjadi kesalahan saat mencoba login.');
     }
-  }
-  
-  document.querySelector('#userForm').addEventListener('submit', kirimForm);
-  function navigate(page) {
-    window.location.href = `../pages/${page}.html`;
-  }
-  
+  });
+});

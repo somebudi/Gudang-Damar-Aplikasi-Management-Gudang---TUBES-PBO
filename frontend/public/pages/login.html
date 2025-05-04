@@ -4,33 +4,32 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Login - Gudang Damar</title>
-<<<<<<< HEAD
   <link rel="stylesheet" href="../styles/login.css">
-=======
-  <link rel="stylesheet" href="Login.css">
->>>>>>> 1fa86c3a191f5bef84e387ec373e86f02aa6e7da
 </head>
 <body>
-  <div class="background"></div>
-
+  <div class="background overlay"></div>
   <div class="login-container">
     <h1>GUDANG DAMAR</h1>
     <p>Sistem Manajemen Penyimpanan</p>
     <div class="login-box">
-      <form>
-        <label>
+      <form autocomplete="on">
+        <label for="username">
           <span>👤</span>
-          <input type="text" placeholder="Nama user" required>
+          <input type="text" id="username" name="username" autocomplete="username" placeholder="Nama user" required>
         </label>
-        <label>
+        <label for="password">
           <span>🔒</span>
-          <input type="password" placeholder="Sandi" required>
+          <input type="password" id="password" name="password" autocomplete="current-password" placeholder="Sandi" required>
         </label>
-        <button type="submit">Masuk</button>
-      </form>
+        <button type="submit ">Masuk</button>
+      </form>      
     </div>
   </div>
 
-  <script src="Login.js"></script>
+  <!-- Tambahkan kontainer untuk router -->
+  <div id="navbar"></div>
+  <div id="app"></div>
+
+  <script type="module" src="../scripts/login.js"></script>
 </body>
 </html>
