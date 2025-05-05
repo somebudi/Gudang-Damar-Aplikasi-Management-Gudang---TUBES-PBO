@@ -11,17 +11,17 @@
     <button id="addItemButton">Tambah Jenis Barang</button>
 
     <main>
-        <div class="grid-container">
+        <div class="grid-container" id="card">
             <div class="item">
-                <p>Gumpalan Pink</p>
+                <!-- <p>Gumpalan Pink</p>
                 <p>Merek: Oogway</p>
                 <p>Ukuran: 1km</p>
                 <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
+                <p>Bahan 🌊</p> -->
             </div>
         </div>
 
-        <!-- Replikasi grid-item jika diperlukan -->
+        <!-- Replikasi grid-item jika diperlukan
         <div class="grid-container">
             <div class="item">
                 <p>Gumpalan Pink</p>
@@ -30,32 +30,12 @@
                 <p>Keterampilan: 100m</p>
                 <p>Bahan 🌊</p>
             </div>
-        </div>
+        </div> -->
 
         <!-- Anda bisa terus menambah grid-container sesuai kebutuhan -->
     </main>
 
-    <script type="module">
-        // Memuat navbar menggunakan fetch
-        async function loadNavbar() {
-            try {
-                const navbarRes = await fetch('navbar.html');
-                const navbarHtml = await navbarRes.text();
-                document.getElementById('navbar').innerHTML = navbarHtml;
-            } catch (err) {
-                console.error('Gagal memuat navbar:', err);
-            }
-        }
-
-        // Cek jika halaman telah dimuat
-        document.addEventListener('DOMContentLoaded', function () {
-            loadNavbar();
-
-            // Event listener untuk tombol tambah item
-            document.getElementById('addItemButton').addEventListener('click', function () {
-                alert('Fitur tambah item belum tersedia.');
-            });
-        });
+    <script src="../scripts/beranda.js" type="module">
     </script>
 </body>
 </html>
