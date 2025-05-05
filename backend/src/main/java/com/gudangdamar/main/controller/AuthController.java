@@ -25,7 +25,7 @@ public class AuthController {
         if (isAuthenticated) {
             // Membuat response dengan token jika autentikasi berhasil
            
-            return ResponseEntity.ok(new LoginResponse("Login Successful"));
+            return ResponseEntity.ok(new LoginResponse("Login sudah berhasil"));
         } else {
             // Mengirimkan error dengan kelas ErrorResponse
             return ResponseEntity.status(401).body(new ErrorResponse("Invalid username or password"));
