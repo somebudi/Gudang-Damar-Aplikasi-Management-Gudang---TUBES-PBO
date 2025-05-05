@@ -12,8 +12,14 @@ public class admin extends Role {
     public String getUsername() {
         return username;
     }
-    public void setUsername(String username) {
-        this.username = username;
+    public void setusername(String username){//apakah sudah benar?
+        User admin = new User(username, password, "admin");
+        if(admin.login(username, username)){
+            this.username = username;
+            System.out.println("Login berhasil! Selamat datang, " + username+" !");
+        }else{
+            System.out.println("Login gagal! Silakan coba lagi.");
+        }
     }
     public String getpassword() {
         return password;
@@ -23,7 +29,7 @@ public class admin extends Role {
     }
 
     @Override
-    public void hakAkses(User user) {
+    public void hakAkses(User user) {//ini kaya gimana ya biar dia bisa akses dari fitur beberapa saja?
         
     }
     

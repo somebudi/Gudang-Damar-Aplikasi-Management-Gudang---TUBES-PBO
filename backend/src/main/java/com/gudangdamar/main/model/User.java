@@ -3,7 +3,7 @@ package com.gudangdamar.main.model;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "login")  // Mengubah nama tabel menjadi "users" (lebih umum)
+@Table(name = "login")
 public class User {
 
     @Id
