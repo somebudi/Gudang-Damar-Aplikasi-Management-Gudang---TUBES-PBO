@@ -37,7 +37,7 @@ CREATE TABLE `tableName` (
     `Harga`	VARCHAR(512),
     `Jumlah`	VARCHAR(512),
     `Total`	VARCHAR(512)
-);
+)ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
 INSERT INTO `tableName` (`ID_Barang`, `Nama`, `Guna/Merek`, `Ukuran`, `Ketebalan`, `Bahan`, `Harga`, `Jumlah`, `Total`) VALUES
               ('1', 'Buleng', 'Kuah', '40', '1', 'Allumunium', 'Rp0,00', '0', 'Rp0,00');
