@@ -1,0 +1,26 @@
+<!-- templates/components/navbar.html -->
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" th:href="@{/styles/navbar.css}">
+</head>
+<body>
+  <div th:fragment="navbar">
+    <header class="header">
+      <div class="logo">
+        <img th:src="@{/gambar/LogoDamar.jpeg}" alt="Logo" width="70" height="70">
+      </div>
+      <ul class="navbar">
+        <li><a th:href="@{/halamanGudangBeranda}" id="buttonPenyimpanan">Penyimpanan</a></li>
+        <li><a th:href="@{/halamanGudangDetail}" id="buttonServis">Servis</a></li>
+        <li><a th:href="@{/halamanGudangPesanan}" id="buttonPesanan">Pesanan</a></li>
+        <li><a th:href="@{/halamanGrafik}" id="buttonGrafik">Grafik</a></li>
+        <li><a th:href="@{/riwayat}" id="buttonRiwayat">Riwayat</a></li>
+        <li><a th:href="@{/kontak}" id="buttonKontak">Kontak</a></li>
+      </ul>
+    </header>
+  </div>
+</body>
+</html>
