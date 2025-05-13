@@ -1,42 +1,26 @@
-// package com.gudangdamar.main.controller;
+package com.gudangdamar.main.controller;
 
-// import com.gudangdamar.main.model.Barang;
-// import com.gudangdamar.main.model.Kategori;
-// import com.gudangdamar.main.service.BarangService;
-// import org.springframework.beans.factory.annotation.Autowired;
-// import org.springframework.web.bind.annotation.*;
+import com.gudangdamar.main.model.Barang;
+import jakarta.persistence.EntityManager;
+import jakarta.persistence.PersistenceContext;
+import jakarta.transaction.Transactional;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
 
-// import java.util.List;
+import java.util.List;
 
-// @RestController
-// @RequestMapping("/barang")
-// public class BarangController {
+@Controller
+public class BarangController {
 
-//     @Autowired
-//     private BarangService barangService;
+    @PersistenceContext
+    private EntityManager entityManager;
 
-//     @GetMapping
-//     public List<Barang> getAllBarang() {
-//         return barangService.getAllBarang();
-//     }
-
-//     @GetMapping("/{id}")
-//     public Barang getBarangById(@PathVariable int id) {
-//         return barangService.getBarangById(id);
-//     }
-
-//     @PostMapping
-//     public Barang addBarang(@RequestBody Barang barang) {
-//         return barangService.saveBarang(barang);
-//     }
-
-//     @PutMapping("/{id}")
-//     public Barang updateBarang(@PathVariable int id, @RequestBody Barang barang) {
-//         return barangService.updateBarang(id, barang);
-//     }
-
-//     @DeleteMapping("/{id}")
-//     public void deleteBarang(@PathVariable int id) {
-//         barangService.deleteBarang(id);
-//     }
-// }
+    @Transactional
+    @GetMapping("/barang")
+    public String tampilkanBarang(Model model) {
+        List<Barang> list = entityManager.createQuery("SELECT b FROM Barang b", Barang.class).getResultList();
+        model.addAttribute("cards", list);
+        return "listBarang"; // templates/listBarang.html
+    }
+}

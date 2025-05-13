@@ -1,5 +1,7 @@
 package com.gudangdamar.main.model;
+import jakarta.persistence.Embeddable;
 
+@Embeddable
 public class Kategori{
     private float ukuran;
     private String bentuk;
