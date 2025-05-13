@@ -1,11 +1,17 @@
 package com.gudangdamar.main.model;
+import jakarta.persistence.*;
 import java.sql.Timestamp;
 
+@Entity
+@Table(name="barang")
 public class Barang{
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int idBarang;
     private String namaBarang;
     //private Harga hargaBarang;
     private int stok;
+    @Embedded
     private Kategori kategori;
     private Timestamp waktuMasuk;
     private Timestamp waktuKeluar;

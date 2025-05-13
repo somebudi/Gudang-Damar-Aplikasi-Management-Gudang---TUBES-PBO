@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Daftar Barang</title>
+    <style>
+        .card {
+            border: 1px solid #ddd;
+            padding: 16px;
+            margin-bottom: 10px;
+        }
+    </style>
+</head>
+<body>
+    <h2>Daftar Barang</h2>
+
+    <div th:each="barang : ${cards}" class="card">
+        <h3 th:text="${barang.namaBarang}">Nama Barang</h3>
+        <p>Merek: <span th:text="${barang.kategori.merek}">Merek</span></p>
+        <p>Ukuran: <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+        <p>Ketebalan: <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+        <p>Bahan: <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+        <p>Stok: <span th:text="${barang.stok}">Stok</span></p>
+        <p>Supplier: <span th:text="${barang.namaSupplier}">Supplier</span></p>
+    </div>
+</body>
+</html>
