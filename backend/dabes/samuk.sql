@@ -418,12 +418,23 @@ INSERT INTO `login` (`username`, `password`, `id`, `role`) VALUES
 --
 
 CREATE TABLE `pesanan` (
+  `Nama_Barang` VARCHAR(50) NOT NULL,
+  `Bahan` VARCHAR(13) NOT NULL,
+  `catatan` VARCHAR(255),
+  `Jumlah` INT NOT NULL,
+  `tanggalTerkirim` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `tanggalPemesanan` TIMESTAMP NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `Bentuk_Barang` INT,
+  FOREIGN KEY (`Bentuk_Barang`) REFERENCES barang(id_barang)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_general_ci;
+
+CREATE TABLE `servis` (
   `ID_Pesanan` int(20) NOT NULL,
   `Nama_Barang` varchar(50) NOT NULL,
   `Bahan` varchar(13) NOT NULL,
   `Jumlah` int(5) NOT NULL,
-  `Tanggal_Ambil` date NOT NULL,
-  `Tanggal_Order` date NOT NULL,
+  `tanggalTerkirim` timestamp NOT NULL,
+  `tanggalPemesanan` timestamp NOT NULL,
   `Bentuk_Barang` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1 COLLATE=latin1_swedish_ci;
 
