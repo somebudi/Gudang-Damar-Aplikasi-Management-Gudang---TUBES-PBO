@@ -1,12 +1,13 @@
+
 <!DOCTYPE html>
-<html lang="id">
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
     </head>
 <body>
-    <div id="navbar"></div>
+      <div th:replace="components/navbar :: navbar"></div>
 
     <button id="addItemButton">Tambah Jenis Barang</button>
 
@@ -35,7 +36,8 @@
         <!-- Anda bisa terus menambah grid-container sesuai kebutuhan -->
     </main>
 
-    <script src="../scripts/beranda.js" type="module">
+     <script th:src="@{/scripts/beranda.js}" type="module"></script>
+
     </script>
 </body>
 </html>
