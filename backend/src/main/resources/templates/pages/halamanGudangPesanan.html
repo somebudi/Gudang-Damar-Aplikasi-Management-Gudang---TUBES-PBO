@@ -4,11 +4,55 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
+    <style>
+    body {
+      
+      background: linear-gradient(to bottom, #c3c3c3, #ffffff);
+      
+    }
+.card {
+    margin-top: 2%;
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px 20px;
+  width: 30%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  box-sizing: border-box;
+  margin-left: 5%;
+}
+
+.card h2 {
+  margin-top: 2%;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+textarea {
+  width: 100%;
+  height: 150px; /* Ganti dari 70% ke tinggi tetap */
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  resize: none;
+  box-sizing: border-box; /* pastikan padding tidak menambah lebar */
+}
+
+    button:hover {
+      background-color: #ccc;
+    }
+  </style>
     </head>
 <body>
-    <div id="navbar"></div>
+    <div th:replace="components/navbar :: navbar"></div>
 
-    <button id="addItemButton">Tambah Jenis Barang</button>
+    <div class="card">
+        <h2>Guci Diamond</h2>
+        <textarea placeholder="Masukkan deskripsi Perbaikan"></textarea>
+        <button>Barang diterima</button>
+    </div>
 
     <main>
         <div class="grid-container" id="card">
