@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Data Servis Gudang</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/beranda.css">
+</head>
+<body>
+    
+    <div th:replace="components/navbar :: navbar"></div>
+    <h1>Daftar Servis Gudang</h1>
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Tanggal Mulai</th>
+                <th>Tanggal Selesai</th>
+                <th>Catatan Pemesanan</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="servis : ${servisList}">
+                <td th:text="${servis.id}">1</td>
+                <td th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</td>
+                <td th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</td>
+                <td th:text="${servis.catatanPemesanan}">Catatan</td>
+            </tr>
+        </tbody>
+    </table>
+</body>
+</html>
