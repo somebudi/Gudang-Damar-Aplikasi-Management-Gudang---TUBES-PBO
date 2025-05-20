@@ -5,28 +5,64 @@
     <title>Data Servis Gudang</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
+    <style>
+    body {
+      
+      background: linear-gradient(to bottom, #c3c3c3 30%, #ffffff 100%, #ffffff 100%);
+
+      
+    }
+.card {
+    margin-top: 2%;
+  background-color: white;
+  border-radius: 12px;
+  padding: 30px 20px;
+  width: 37%;
+  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+  text-align: center;
+  box-sizing: border-box;
+}
+
+.card h2 {
+  margin-top: 2%;
+  margin-bottom: 20px;
+  font-size: 22px;
+  font-weight: bold;
+}
+
+textarea {
+  width: 100%;
+  height: 150px; /* Ganti dari 70% ke tinggi tetap */
+  padding: 12px;
+  font-size: 14px;
+  border: 1px solid #999;
+  border-radius: 4px;
+  resize: none;
+  box-sizing: border-box; /* pastikan padding tidak menambah lebar */
+}
+
+    button:hover {
+      background-color: #ccc;
+    }
+  </style>
 </head>
 <body>
     
     <div th:replace="components/navbar :: navbar"></div>
-    <h1>Daftar Servis Gudang</h1>
-    <table>
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tanggal Mulai</th>
-                <th>Tanggal Selesai</th>
-                <th>Catatan Pemesanan</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="servis : ${servisList}">
-                <td th:text="${servis.id}">1</td>
-                <td th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</td>
-                <td th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</td>
-                <td th:text="${servis.catatanPemesanan}">Catatan</td>
-            </tr>
-        </tbody>
-    </table>
+    <center>
+    <div class="card">
+        <h2>Guci Diamond</h2>
+        <textarea placeholder="Masukkan deskripsi Perbaikan"></textarea>
+        <button>Barang diterima</button>
+    </div>
+    </center>
+        <div class="grid-container">
+            <div class="item" th:each="servis : ${servisList}">
+                <p><strong>ID:</strong> <span th:text="${servis.id}">1</span></p>
+                <p><strong>Tanggal Mulai:</strong> <span th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</span></p>
+                <p><strong>Tanggal Selesai:</strong> <span th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</span></p>
+                <p><strong>Catatan:</strong> <span th:text="${servis.catatanPemesanan}">Catatan pemesanan...</span></p>
+            </div>
+        </div>
 </body>
 </html>
