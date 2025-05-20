@@ -1,51 +1,67 @@
 package com.gudangdamar.main.model;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "servis")
 public class Servis {
-    
-    private Barang barang; // ← relasi: Pemesanan memiliki Barang
-    private Timestamp tanggalMulaiServis;
-    private Timestamp tanggalSelesaiServis;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "tanggal_mulai_servis")
+    private LocalDateTime tanggalMulaiServis;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "tanggal_selesai_servis")
+    private LocalDateTime tanggalSelesaiServis;
+
+    @Column(name = "catatan_pemesanan", length = 255)
     private String catatanPemesanan;
-    public Servis( Barang barang, Timestamp tanggalMulaiServis,Timestamp tanggalSelesaiServis,String catatanPemesanan) {
-       
-        this.barang = barang;
+
+    public Servis() {}
+
+    public Servis(LocalDateTime tanggalMulaiServis, LocalDateTime tanggalSelesaiServis, String catatanPemesanan) {
         this.tanggalMulaiServis = tanggalMulaiServis;
         this.tanggalSelesaiServis = tanggalSelesaiServis;
         this.catatanPemesanan = catatanPemesanan;
-        int idBarangBaru = Integer.parseInt(String.valueOf(barang.getIdBarang()) + "50");
-        this.barang.setIdBarang(idBarangBaru);
     }
 
-    public Barang getBarang() {
-        return barang;
+    // Getter & Setter
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public LocalDateTime getTanggalMulaiServis() {
+        return tanggalMulaiServis;
+    }
+
+    public void setTanggalMulaiServis(LocalDateTime tanggalMulaiServis) {
+        this.tanggalMulaiServis = tanggalMulaiServis;
+    }
+
+    public LocalDateTime getTanggalSelesaiServis() {
+        return tanggalSelesaiServis;
+    }
+
+    public void setTanggalSelesaiServis(LocalDateTime tanggalSelesaiServis) {
+        this.tanggalSelesaiServis = tanggalSelesaiServis;
     }
 
     public String getCatatanPemesanan() {
         return catatanPemesanan;
     }
 
-    public void setBarang(Barang barang) {
-        this.barang = barang;
-    }
-
-    public Timestamp gettanggalMulaiServis() {
-        return tanggalMulaiServis;
-    }
-
-    public Timestamp gettanggalSelesaiServis() {
-        return tanggalSelesaiServis;
-    }
-
-    public void settanggalSelesaiServis(Timestamp tanggalTerkirim) {
-        this.tanggalSelesaiServis = tanggalTerkirim;
-    }
-    public void setTanggalPemesanan(Timestamp tanggalMulaiServis) {
-        this.tanggalMulaiServis = tanggalMulaiServis;
-    }
     public void setCatatanPemesanan(String catatanPemesanan) {
         this.catatanPemesanan = catatanPemesanan;
     }
-    
 }

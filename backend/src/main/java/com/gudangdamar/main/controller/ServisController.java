@@ -1,30 +1,25 @@
 package com.gudangdamar.main.controller;
-
 import com.gudangdamar.main.model.Servis;
-import com.gudangdamar.main.model.Barang;
-
+import com.gudangdamar.main.repository.ServisRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import java.sql.Timestamp;
+import java.util.List;
 
 @RestController
-
+@RequestMapping("/servis")
 public class ServisController {
 
-    @PostMapping("/servis")
-    public Servis buatPemesanan(@RequestBody Servis request) {
-        Barang barang = request.getBarang();
-        Timestamp tanggalMulaiServis = request.gettanggalMulaiServis();
-        Timestamp tanggalSelesaiServis = request.gettanggalSelesaiServis();
-        String catatan = request.getCatatanPemesanan();
-
-        // Membuat objek pemesanan
-        Servis servis = new Servis(barang, tanggalMulaiServis, tanggalSelesaiServis, catatan);
-
-        // Jika kamu ingin menyimpan ke database, panggil repository di sini
-        // misalnya: pemesananRepository.save(pemesanan);
-
-        return servis;
-    }
+    @Autowired
+    private ServisRepository servisRepository;
     
+    @PostMapping
+    public Servis buatPemesanan(@RequestBody Servis request) {
+        return servisRepository.save(request);
+    }
+
+    @GetMapping("/list")
+    public List<Servis> listServis() {
+        return servisRepository.findAll();
+    }
 }
