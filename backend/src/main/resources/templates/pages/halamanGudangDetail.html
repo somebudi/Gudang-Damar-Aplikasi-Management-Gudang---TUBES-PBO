@@ -1,0 +1,46 @@
+
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="../styles/beranda.css">
+    </head>
+<body>
+      <div th:replace="components/navbar :: navbar"></div>
+
+    
+    <style>
+        body{
+            background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
+        }
+
+        .card{
+            width: 419px;
+            height: 300px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            font-family: sans-serif;
+        }
+    </style>
+    <main>
+        <center>
+        <div class="card">
+                <p style="margin-bottom: 10px;">${Barang.namaBarang}</p>
+
+                <p>Merek: ${Kategori.merek}</p>
+                <p>Ukuran: ${Kategori.ukuran}</p>
+                <p>Ketebalan: ${Kategori.ketebalan}</p>
+                <p>Bahan: ${Kategori.bahan}</p>
+            </div>
+        </center>
+    </main>
+
+     <script th:src="@{/scripts/beranda.js}" type="module"></script>
+
+    </script>
+</body>
+</html>
