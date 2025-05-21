@@ -1,31 +1,66 @@
-
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
+    <style>
+        /* Efek transisi gelap dan geser */
+        .page-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: black;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+            z-index: 9999;
+        }
+
+        .page-transition.active {
+            opacity: 1;
+            pointer-events: auto;
+            animation: slideRight 0.5s forwards;
+        }
+
+        @keyframes slideRight {
+            from {
+                transform: translateX(0);
+            }
+            to {
+                transform: translateX(100%);
+            }
+        }
+
+    </style>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/beranda.css">
-    </head>
+    <link rel="stylesheet" th:href="@{/styles/beranda.css}">
+</head>
 <body>
-      <div th:replace="components/navbar :: navbar"></div>
+    <div th:replace="components/navbar :: navbar"></div>
 
     <button id="addItemButton">Tambah Jenis Barang</button>
 
     <main>
-        <h1>Daftar Gudang</h1>
+        <h1>Daftar </h1>
+        
         <div class="grid-container" id="card">
-            <div class="item">
-                <p>${Barang.namaBarang}</p>
-                <p>Merek: ${Kategori.merek}</p>
-                <p>Ukuran: ${Kategori.ukuran}</p>
-                <p>Ketebalan: ${Kategori.ketebalan}</p>
-                <p>Bahan: ${Kategori.bahan}</p>
+            <div class="item" th:each="servis : ${servisList}">
+                <a th:href="@{/halamanGudangDetail}" style="text-decoration: none; color: inherit;">
+                    <div class="card-content">
+                        <p><strong>ID:</strong> <span th:text="${servis.id}">1</span></p>
+                        <p><strong>Tanggal Mulai:</strong> <span th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</span></p>
+                        <p><strong>Tanggal Selesai:</strong> <span th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</span></p>
+                        <p><strong>Catatan:</strong> <span th:text="${servis.catatanPemesanan}">Catatan pemesanan...</span></p>
+                    </div>
+                </a>
             </div>
         </div>
+        
     </main>
+    <div class="page-transition" id="transitionOverlay"></div>
 
-     <script th:src="@{/scripts/beranda.js}" type="module"></script>
-
-    </script>
+    <script th:src="@{/scripts/beranda.js}" type="module"></script>
+    
 </body>
 </html>

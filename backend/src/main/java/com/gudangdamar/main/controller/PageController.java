@@ -21,7 +21,9 @@ public class PageController {
     }
 
     @GetMapping("/halamanGudangBeranda")
-    public String showGudangBeranda() {
+    public String showGudangBeranda(Model model) {
+        List<Servis> servisList = servisRepository.findAll();
+        model.addAttribute("servisList", servisList);
         return "pages/halamanGudangBeranda";
     }
 
