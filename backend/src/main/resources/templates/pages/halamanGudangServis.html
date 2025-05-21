@@ -1,13 +1,15 @@
 <!DOCTYPE html>
-<html lang="id">
+<html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
+    <title>Data Servis Gudang</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
     <style>
     body {
       
-      background: linear-gradient(to bottom, #c3c3c3, #ffffff);
+      background: linear-gradient(to bottom, #c3c3c3 30%, #ffffff 100%, #ffffff 100%);
+
       
     }
 .card {
@@ -15,11 +17,10 @@
   background-color: white;
   border-radius: 12px;
   padding: 30px 20px;
-  width: 30%;
+  width: 37%;
   box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
   text-align: center;
   box-sizing: border-box;
-  margin-left: 5%;
 }
 
 .card h2 {
@@ -44,42 +45,24 @@ textarea {
       background-color: #ccc;
     }
   </style>
-    </head>
+</head>
 <body>
+    
     <div th:replace="components/navbar :: navbar"></div>
-
+    <center>
     <div class="card">
         <h2>Guci Diamond</h2>
         <textarea placeholder="Masukkan deskripsi Perbaikan"></textarea>
         <button>Barang diterima</button>
     </div>
-
-    <main>
-        <div class="grid-container" id="card">
-            <div class="item">
-                <!-- <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p> -->
+    </center>
+        <div class="grid-container">
+            <div class="item" th:each="servis : ${servisList}">
+                <p><strong>ID:</strong> <span th:text="${servis.id}">1</span></p>
+                <p><strong>Tanggal Mulai:</strong> <span th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</span></p>
+                <p><strong>Tanggal Selesai:</strong> <span th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</span></p>
+                <p><strong>Catatan:</strong> <span th:text="${servis.catatanPemesanan}">Catatan pemesanan...</span></p>
             </div>
         </div>
-
-        <!-- Replikasi grid-item jika diperlukan
-        <div class="grid-container">
-            <div class="item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div> -->
-
-        <!-- Anda bisa terus menambah grid-container sesuai kebutuhan -->
-    </main>
-
-    <script src="../scripts/beranda.js" type="module">
-    </script>
 </body>
 </html>
