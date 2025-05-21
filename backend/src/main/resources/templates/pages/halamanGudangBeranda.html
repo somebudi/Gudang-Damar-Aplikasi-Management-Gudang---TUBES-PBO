@@ -12,28 +12,16 @@
     <button id="addItemButton">Tambah Jenis Barang</button>
 
     <main>
+        <h1>Daftar Gudang</h1>
         <div class="grid-container" id="card">
             <div class="item">
-                <!-- <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p> -->
+                <p>${Barang.namaBarang}</p>
+                <p>Merek: ${Kategori.merek}</p>
+                <p>Ukuran: ${Kategori.ukuran}</p>
+                <p>Ketebalan: ${Kategori.ketebalan}</p>
+                <p>Bahan: ${Kategori.bahan}</p>
             </div>
         </div>
-
-        <!-- Replikasi grid-item jika diperlukan
-        <div class="grid-container">
-            <div class="item">
-                <p>Gumpalan Pink</p>
-                <p>Merek: Oogway</p>
-                <p>Ukuran: 1km</p>
-                <p>Keterampilan: 100m</p>
-                <p>Bahan 🌊</p>
-            </div>
-        </div> -->
-
-        <!-- Anda bisa terus menambah grid-container sesuai kebutuhan -->
     </main>
 
      <script th:src="@{/scripts/beranda.js}" type="module"></script>

@@ -1,26 +1,27 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Daftar Barang</title>
-    <style>
-        .card {
-            border: 1px solid #ddd;
-            padding: 16px;
-            margin-bottom: 10px;
-        }
-    </style>
+    <title>List Barang</title>
 </head>
 <body>
-    <h2>Daftar Barang</h2>
-
-    <div th:each="barang : ${cards}" class="card">
-        <h3 th:text="${barang.namaBarang}">Nama Barang</h3>
-        <p>Merek: <span th:text="${barang.kategori.merek}">Merek</span></p>
-        <p>Ukuran: <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
-        <p>Ketebalan: <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
-        <p>Bahan: <span th:text="${barang.kategori.bahan}">Bahan</span></p>
-        <p>Stok: <span th:text="${barang.stok}">Stok</span></p>
-        <p>Supplier: <span th:text="${barang.namaSupplier}">Supplier</span></p>
-    </div>
+    <h1>Daftar Barang</h1>
+    <table border="1">
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>Nama Barang</th>
+                <th>Stok</th>
+                <th>Nama Supplier</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr th:each="barang : ${listBarang}">
+                <td th:text="${barang.idBarang}">ID</td>
+                <td th:text="${barang.namaBarang}">Nama Barang</td>
+                <td th:text="${barang.stok}">Stok</td>
+                <td th:text="${barang.namaSupplier}">Supplier</td>
+            </tr>
+        </tbody>
+    </table>
 </body>
 </html>
