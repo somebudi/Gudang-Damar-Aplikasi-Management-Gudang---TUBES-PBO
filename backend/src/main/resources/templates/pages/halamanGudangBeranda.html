@@ -45,22 +45,22 @@
         <h1>Daftar </h1>
         
         <div class="grid-container" id="card">
-            <div class="item" th:each="servis : ${servisList}">
-                <a th:href="@{/halamanGudangDetail}" style="text-decoration: none; color: inherit;">
-                    <div class="card-content">
-                        <p><strong>ID:</strong> <span th:text="${servis.id}">1</span></p>
-                        <p><strong>Tanggal Mulai:</strong> <span th:text="${servis.tanggalMulaiServis}">2025-05-20T10:00:00</span></p>
-                        <p><strong>Tanggal Selesai:</strong> <span th:text="${servis.tanggalSelesaiServis}">2025-05-25T15:30:00</span></p>
-                        <p><strong>Catatan:</strong> <span th:text="${servis.catatanPemesanan}">Catatan pemesanan...</span></p>
-                    </div>
-                </a>
-            </div>
+           <div class="item" th:each="barang : ${barangList}">
+    <a th:href="@{'/halamanGudangDetail/' + ${barang.idBarang}}">
+        <div class="card-content">
+            <p><strong>Nama:</strong> <span th:text="${barang.nama}"></span></p>
+            <p><strong>Ukuran:</strong> <span th:text="${barang.kategori.ukuran}"></span></p>
+            <p><strong>Harga:</strong> <span th:text="${barang.harga}"></span></p>
         </div>
+    </a>
+</div>
+
+        </div>
+
         
     </main>
     <div class="page-transition" id="transitionOverlay"></div>
 
-    <script th:src="@{/scripts/beranda.js}" type="module"></script>
     
 </body>
 </html>

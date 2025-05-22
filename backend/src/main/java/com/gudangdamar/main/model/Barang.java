@@ -7,27 +7,38 @@ import java.sql.Timestamp;
 public class Barang{
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    
+    @Column(name = "ID_Barang")
     private int idBarang;
-    private String namaBarang;
+    @Column(name = "nama")
+    private String nama;
     //private Harga hargaBarang;
-    private int stok;
+    @Column(name = "Harga")
+    private int harga;
+    @Column(name = "jumlah")
+    private int jumlah;
+    @Column(name = "Total")
+    private int total;
     @Embedded
     private Kategori kategori;
-    private Timestamp waktuMasuk;
-    private Timestamp waktuKeluar;
-    private Timestamp waktuPendataan;
-    private String namaSupplier;
+    // private Timestamp waktuMasuk;
+    // private Timestamp waktuKeluar;
+    // private Timestamp waktuPendataan;
+    // private String namaSupplier;
+    public Barang() {}
 
-    public Barang(int idBarang,String namaBarang, int stok, Kategori kategori, Timestamp waktuMasuk, Timestamp waktuKeluar, Timestamp waktuPendataan, String namaSupplier){
+    public Barang(int idBarang,String nama,int harga, int jumlah, Kategori kategori,int total){
         this.idBarang=idBarang;
-        this.namaBarang=namaBarang;
-        //this.hargaBarang=hargaBarang;
-        this.stok=stok;
+        this.nama=nama;
+        this.harga=harga;
+        this.jumlah=jumlah;
+       
+        this.total=total;
         this.kategori = kategori;
-        this.waktuMasuk = waktuMasuk;
-        this.waktuKeluar = waktuKeluar;
-        this.waktuPendataan = waktuPendataan;
-        this.namaSupplier = namaSupplier;
+        // this.waktuMasuk = waktuMasuk;
+        // this.waktuKeluar = waktuKeluar;
+        // this.waktuPendataan = waktuPendataan;
+        // this.namaSupplier = namaSupplier;
     }
 
     public void setIdBarang(int idBarang){
@@ -38,29 +49,30 @@ public class Barang{
         return idBarang;
     }
 
-    public void setNamaBarang(String namaBarang){
-        this.namaBarang=namaBarang;
+    public void setNama(String nama){
+        this.nama=nama;
     }
 
-    public String getNamaBarang(){
-        return namaBarang;
+    public String getNama(){
+        return nama;
     }
 
-    //public void setHargaBarang(Harga hargaBarang){
-        //this.hargaBarang=hargaBarang;
-    //}
-
-    //public Harga getHargaBarang(){
-        //return hargaBarang;
-    //}
-
-    public void setStok(int stok){
-        this.stok=stok;
+    public void setHargaBarang(int harga){
+        this.harga=harga;
     }
 
-    public int getStok(){
-        return stok;
+    public int getHarga(){
+        return harga;
     }
+
+    public void setJumlah(int jumlah){
+        this.jumlah=jumlah;
+    }
+
+    public int getJumlah() {
+        return jumlah;
+    }
+
 
     public void setKategori(Kategori kategori){
         this.kategori=kategori;
@@ -70,35 +82,35 @@ public class Barang{
         return kategori;
     }
 
-    public void setWaktuMasuk(Timestamp waktuMasuk){
-        this.waktuMasuk=waktuMasuk;
-    }
+    // public void setWaktuMasuk(Timestamp waktuMasuk){
+    //     this.waktuMasuk=waktuMasuk;
+    // }
 
-    public Timestamp getWaktuMasuk(){
-        return waktuMasuk;
-    }
+    // public Timestamp getWaktuMasuk(){
+    //     return waktuMasuk;
+    // }
 
-    public void setWaktuKeluar(Timestamp waktuKeluar){
-        this.waktuKeluar=waktuKeluar;
-    }
+    // public void setWaktuKeluar(Timestamp waktuKeluar){
+    //     this.waktuKeluar=waktuKeluar;
+    // }
 
-    public Timestamp getWaktuKeluar(){
-        return waktuKeluar;
-    }
+    // public Timestamp getWaktuKeluar(){
+    //     return waktuKeluar;
+    // }
 
-    public void setWaktuPendataan(Timestamp waktuPendataan){
-        this.waktuPendataan=waktuPendataan;
-    }
+    // public void setWaktuPendataan(Timestamp waktuPendataan){
+    //     this.waktuPendataan=waktuPendataan;
+    // }
 
-    public Timestamp getWaktuPendataan(){
-        return waktuPendataan;
-    }
+    // public Timestamp getWaktuPendataan(){
+    //     return waktuPendataan;
+    // }
 
-    public void setNamaSupplier(String namaSupplier){
-        this.namaSupplier=namaSupplier;
-    }
+    // public void setNamaSupplier(String namaSupplier){
+    //     this.namaSupplier=namaSupplier;
+    // }
 
-    public String getNamaSupplier(){
-        return namaSupplier;
-    }
+    // public String getNamaSupplier(){
+    //     return namaSupplier;
+    // }
 }
