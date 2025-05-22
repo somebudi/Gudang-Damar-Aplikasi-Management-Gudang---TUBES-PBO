@@ -45,6 +45,8 @@
         <h1>Daftar </h1>
         
         <div class="grid-container" id="card">
+            <a th:href="@{servis/edit/{id}(id=${servis.id})}" class="btn btn-primary w-100 mb-2">Edit</a>
+
            <div class="item" th:each="barang : ${barangList}">
     <a th:href="@{'/halamanGudangDetail/' + ${barang.idBarang}}">
         <div class="card-content">
