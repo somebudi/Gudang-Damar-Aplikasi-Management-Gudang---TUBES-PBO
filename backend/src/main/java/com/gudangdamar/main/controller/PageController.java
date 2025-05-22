@@ -3,14 +3,14 @@ package com.gudangdamar.main.controller;
 import com.gudangdamar.main.repository.BarangRepository;
 import com.gudangdamar.main.model.Servis;
 import com.gudangdamar.main.model.Barang;
-import com.gudangdamar.main.model.Kategori;
+import com.gudangdamar.main.model.Pemesanan;
 import com.gudangdamar.main.repository.ServisRepository;
-
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import com.gudangdamar.main.model.Pemesanan;
+
 import com.gudangdamar.main.repository.PemesananRepository;
 import java.util.List;
 
@@ -22,6 +22,9 @@ public class PageController {
 
     @Autowired
     private BarangRepository barangRepository;
+
+    @Autowired
+    private PemesananRepository pemesananRepository;
 
     @GetMapping("/")
     public String showLoginPage() {
@@ -45,16 +48,6 @@ public class PageController {
     model.addAttribute("barang", barang);
     return "pages/halamanGudangDetail";
 }
-
-
-
-
-
-    @GetMapping("/halamanGudangPesanan")
-    public String showGudangPesanan() {
-        return "pages/halamanGudangPesanan";
-    }
-
     @GetMapping("/halamanGrafik")
     public String showGudangGrafik() {
         return "pages/halamanGrafik";
@@ -67,20 +60,12 @@ public class PageController {
         model.addAttribute("servisBaru", new Servis());
         return "pages/halamanGudangServis";
     }
-
-    @PostMapping
-    public String buatPemesanan(@ModelAttribute("servisBaru") Servis request,
-                                RedirectAttributes redirectAttributes) {
-        servisRepository.save(request);
-        redirectAttributes.addFlashAttribute("successMessage", "Servis berhasil ditambahkan!");
-        return "redirect:/halamanGudangServis";
+    @GetMapping("/halamanGudangPesanan")
+    public String showGudangPemesanan(Model model) {
+        List<Pemesanan> pemesananList = pemesananRepository.findAll();
+        model.addAttribute("pemesananList", pemesananList);
+         model.addAttribute("pemesananBaru", new Pemesanan());
+        return "pages/halamanGudangPesanan";
     }
-
-    @PostMapping("/delete/{id}")
-    public String hapusPemesanan(@PathVariable Long id,
-                                 RedirectAttributes redirectAttributes) {
-        servisRepository.deleteById(id);
-        redirectAttributes.addFlashAttribute("successMessage", "Servis berhasil dihapus!");
-        return "redirect:/halamanGudangServis";
-    }
+    
 }
