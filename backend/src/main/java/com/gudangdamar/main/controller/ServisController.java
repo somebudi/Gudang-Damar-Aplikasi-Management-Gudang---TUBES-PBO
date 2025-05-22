@@ -3,57 +3,82 @@ package com.gudangdamar.main.controller;
 import com.gudangdamar.main.model.Servis;
 import com.gudangdamar.main.repository.ServisRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
-import java.util.List;
+import java.time.LocalDateTime;
 
-@RestController
-@RequestMapping("/api/servis") // Prefix untuk endpoint REST API
+@Controller
 public class ServisController {
 
     @Autowired
     private ServisRepository servisRepository;
 
-   
-    @PostMapping
-    public Servis tambahServis(@RequestBody Servis request) {
-        return servisRepository.save(request);
+    @PostMapping("servis/tambah")
+    public String tambahServis(@ModelAttribute("servisBaru") Servis servisBaru,
+                               RedirectAttributes redirectAttributes) {
+        servisBaru.setTanggalMulaiServis(LocalDateTime.now());
+        servisRepository.save(servisBaru);
+        redirectAttributes.addFlashAttribute("success", "Servis berhasil ditambahkan!");
+        return "redirect:/halamanGudangServis";
     }
 
- 
-    @GetMapping
-    public List<Servis> getSemuaServis() {
-        return servisRepository.findAll();
+    @PostMapping("servis/selesai/{id}")
+    public String selesaiServis(@PathVariable Long id,
+                                RedirectAttributes redirectAttributes) {
+        Servis servis = servisRepository.findById(id).orElse(null);
+        if (servis != null && servis.getTanggalSelesaiServis() == null) {
+            servis.setTanggalSelesaiServis(LocalDateTime.now());
+            servisRepository.save(servis);
+            redirectAttributes.addFlashAttribute("success", "Servis ditandai selesai.");
+        }
+        return "redirect:/halamanGudangServis";
     }
 
-  
-    @GetMapping("/{id}")
-    public Servis getServisById(@PathVariable Long id) {
-        return servisRepository.findById(id)
-                .orElseThrow(() -> new RuntimeException("Servis dengan ID " + id + " tidak ditemukan"));
-    }
+    
 
-
-    @PutMapping("/{id}")
-    public Servis updateServis(@PathVariable Long id, @RequestBody Servis request) {
-        return servisRepository.findById(id)
-                .map(servis -> {
-                    servis.setTanggalMulaiServis(request.getTanggalMulaiServis());
-                    servis.setTanggalSelesaiServis(request.getTanggalSelesaiServis());
-                    servis.setCatatanPemesanan(request.getCatatanPemesanan());
-                    return servisRepository.save(servis);
-                })
-                .orElseThrow(() -> new RuntimeException("Servis dengan ID " + id + " tidak ditemukan"));
-    }
-
-   
-    @DeleteMapping("/{id}")
-    public String hapusServis(@PathVariable Long id) {
+    @PostMapping("servis/delete/{id}")
+    public String hapusPemesanan(@PathVariable Long id,
+                                 RedirectAttributes redirectAttributes) {
         if (servisRepository.existsById(id)) {
             servisRepository.deleteById(id);
-            return "Servis dengan ID " + id + " berhasil dihapus.";
+            redirectAttributes.addFlashAttribute("successMessage", "Servis berhasil dihapus!");
         } else {
-            return "Servis dengan ID " + id + " tidak ditemukan.";
+            redirectAttributes.addFlashAttribute("errorMessage", "Data servis tidak ditemukan.");
         }
+        return "redirect:/halamanGudangServis";
+    }
+
+    @GetMapping("servis/edit/{id}")
+    public String showEditForm(@PathVariable Long id, Model model, RedirectAttributes redirectAttributes) {
+        Servis servis = servisRepository.findById(id).orElse(null);
+        if (servis == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Data servis tidak ditemukan.");
+            return "redirect:/halamanGudangServis";
+        }
+
+        model.addAttribute("servis", servis);
+        return "pages/formEditServis";
+    }
+
+    @PostMapping("/servis/update/{id}")
+    public String updateServis(@PathVariable Long id, @ModelAttribute("servis") Servis servisData,
+                               RedirectAttributes redirectAttributes) {
+        Servis existing = servisRepository.findById(id).orElse(null);
+        if (existing == null) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Gagal memperbarui: data tidak ditemukan.");
+            return "redirect:/halamanGudangServis";
+        }
+
+        existing.setCatatanPemesanan(servisData.getCatatanPemesanan());
+        servisRepository.save(existing);
+
+        redirectAttributes.addFlashAttribute("successMessage", "Data servis berhasil diperbarui!");
+        return "redirect:/halamanGudangServis";
     }
 }

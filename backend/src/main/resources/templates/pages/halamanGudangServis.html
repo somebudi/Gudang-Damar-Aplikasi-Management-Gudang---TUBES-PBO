@@ -1,59 +1,101 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
-    <title>Halaman Servis</title>
     <meta charset="UTF-8">
+    <title>Data Servis Gudang</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="../styles/beranda.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"/>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #FBECCA 30%, #ffffff 100%);
+        }
+
+        .card {
+            margin-top: 2%;
+            background-color: white;
+            border-radius: 12px;
+            padding: 30px 20px;
+            width: 40%;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+            text-align: center;
+        }
+
+        .grid-container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .item {
+            background-color: #ffffff;
+            padding: 20px;
+            border-radius: 12px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            width: 300px;
+        }
+
+        textarea {
+            width: 100%;
+            height: 200px;
+            padding: 12px;
+            font-size: 14px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            resize: vertical;
+            box-sizing: border-box;
+        }
+    </style>
 </head>
 <body>
-    <div th:replace="components/navbar :: navbar"></div>
-    <h1>Daftar Servis</h1>
 
-    <!-- Pesan sukses -->
-    <div th:if="${successMessage}" style="color: green;">
-        <p th:text="${successMessage}"></p>
+<div th:replace="components/navbar :: navbar"></div>
+
+<div class="container mt-5">
+    <div class="card mx-auto">
+        <h2 class="mb-4">Tambah Catatan Servis</h2>
+
+        <form th:action="@{servis/tambah}" method="post" th:object="${servisBaru}">
+            <div class="mb-3 text-start">
+               
+                <textarea class="form-control" id="catatanPemesanan" th:field="*{catatanPemesanan}" required></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100">Tambah Servis</button>
+        </form>
     </div>
 
-    <!-- Form tambah servis -->
-    <form th:action="@{/}" method="post" th:object="${servisBaru}">
-        <label>Tanggal Mulai Servis:</label><br>
-        <input type="datetime-local" th:field="*{tanggalMulaiServis}" required><br><br>
+    <h3 class="text-center mt-5">Daftar Servis</h3>
+    <div class="grid-container">
+        <div class="item" th:each="servis : ${servisList}">
+            <p><strong>ID:</strong> <span th:text="${servis.id}">1</span></p>
+            <p><strong>Catatan:</strong> <span th:text="${servis.catatanPemesanan}">-</span></p>
+            <p><strong>Mulai:</strong>
+                <span th:if="${servis.tanggalMulaiServis != null}" th:text="${#temporals.format(servis.tanggalMulaiServis, 'dd MMM yyyy HH:mm')}">-</span>
+                <span th:if="${servis.tanggalMulaiServis == null}">Belum</span>
+            </p>
+            <p><strong>Selesai:</strong>
+                <span th:if="${servis.tanggalSelesaiServis != null}" th:text="${#temporals.format(servis.tanggalSelesaiServis, 'dd MMM yyyy HH:mm')}">-</span>
+                <span th:if="${servis.tanggalSelesaiServis == null}">Belum selesai</span>
+            </p>
 
-        <label>Tanggal Selesai Servis:</label><br>
-        <input type="datetime-local" th:field="*{tanggalSelesaiServis}" required><br><br>
+            <form th:if="${servis.tanggalSelesaiServis == null}" th:action="@{servis/selesai/{id}(id=${servis.id})}" method="post">
+                <button type="submit" class="btn btn-warning w-100 mb-2">Sudah Selesai</button>
+            </form>
 
-        <label>Catatan Pemesanan:</label><br>
-        <textarea th:field="*{catatanPemesanan}" required></textarea><br><br>
+            <!-- Tombol Edit -->
+            <a th:href="@{servis/edit/{id}(id=${servis.id})}" class="btn btn-primary w-100 mb-2">Edit</a>
 
-        <button type="submit">Tambah Servis</button>
-    </form>
+            <!-- Tombol Hapus -->
+            <form th:action="@{servis/delete/{id}(id=${servis.id})}" method="post"
+               onsubmit="return confirm('Yakin ingin menghapus data ini?');">
+                <button type="submit" class="btn btn-danger w-100">Hapus</button>
+            </form>
+            
+        </div>
+    </div>
+</div>
 
-    <hr>
-
-    <!-- Tabel daftar servis -->
-    <table border="1">
-        <thead>
-            <tr>
-                <th>ID</th>
-                <th>Tanggal Mulai</th>
-                <th>Tanggal Selesai</th>
-                <th>Catatan</th>
-                <th>Aksi</th>
-            </tr>
-        </thead>
-        <tbody>
-            <tr th:each="servis : ${servisList}">
-                <td th:text="${servis.id}"></td>
-                <td th:text="${#temporals.format(servis.tanggalMulaiServis, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${#temporals.format(servis.tanggalSelesaiServis, 'yyyy-MM-dd HH:mm')}"></td>
-                <td th:text="${servis.catatanPemesanan}"></td>
-                <td>
-                    <form th:action="@{'/delete/' + ${servis.id}}" method="post">
-                        <button type="submit" onclick="return confirm('Yakin hapus servis ini?')">Hapus</button>
-                    </form>
-                </td>
-            </tr>
-        </tbody>
-    </table>
 </body>
 </html>
