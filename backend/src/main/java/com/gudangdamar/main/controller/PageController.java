@@ -3,14 +3,14 @@ package com.gudangdamar.main.controller;
 import com.gudangdamar.main.repository.BarangRepository;
 import com.gudangdamar.main.model.Servis;
 import com.gudangdamar.main.model.Barang;
-import com.gudangdamar.main.model.Pemesanan;
+import com.gudangdamar.main.model.Kategori;
 import com.gudangdamar.main.repository.ServisRepository;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-
+import com.gudangdamar.main.model.Pemesanan;
 import com.gudangdamar.main.repository.PemesananRepository;
 import java.util.List;
 
@@ -25,7 +25,6 @@ public class PageController {
 
     @Autowired
     private PemesananRepository pemesananRepository;
-
     @GetMapping("/")
     public String showLoginPage() {
         return "pages/login"; // templates/pages/login.html
@@ -48,24 +47,29 @@ public class PageController {
     model.addAttribute("barang", barang);
     return "pages/halamanGudangDetail";
 }
+
+
+
+
+
+
     @GetMapping("/halamanGrafik")
     public String showGudangGrafik() {
         return "pages/halamanGrafik";
     }
 
     @GetMapping("/halamanGudangServis")
-    public String showGudangServis(Model model) {
-        List<Servis> servisList = servisRepository.findAll();
-        model.addAttribute("servisList", servisList);
-        model.addAttribute("servisBaru", new Servis());
-        return "pages/halamanGudangServis";
-    }
-    @GetMapping("/halamanGudangPesanan")
-    public String showGudangPemesanan(Model model) {
-        List<Pemesanan> pemesananList = pemesananRepository.findAll();
-        model.addAttribute("pemesananList", pemesananList);
-         model.addAttribute("pemesananBaru", new Pemesanan());
-        return "pages/halamanGudangPesanan";
-    }
-    
+public String showGudangServis(Model model) {
+    model.addAttribute("servisBaru", new Servis());
+    model.addAttribute("servisList", servisRepository.findAll());
+    return "pages/halamanGudangServis";
+}
+
+@GetMapping("/halamanGudangPesanan")
+public String showGudangPemesanan(Model model) {
+    model.addAttribute("pemesananBaru", new Pemesanan());
+    model.addAttribute("pemesananList", pemesananRepository.findAll());
+    return "pages/halamanGudangPesanan";
+}
+
 }
