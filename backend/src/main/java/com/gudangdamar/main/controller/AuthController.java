@@ -1,34 +1,44 @@
 package com.gudangdamar.main.controller;
 
-import com.gudangdamar.main.dto.LoginRequest;
-import com.gudangdamar.main.dto.LoginResponse;
-import com.gudangdamar.main.dto.ErrorResponse;  // Import kelas ErrorResponse
-import com.gudangdamar.main.service.UserService;
-
+import com.gudangdamar.main.model.User;
+import com.gudangdamar.main.repository.UserRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
-@RestController
-
-@CrossOrigin(origins = "http://127.0.0.1:5500")  // Menambahkan CORS secara langsung
+@Controller
 public class AuthController {
 
     @Autowired
-    private UserService userService;
+    private UserRepository userRepository;
 
+    // Halaman login (GET)
+    @GetMapping("/login")
+    public String showLoginPage(Model model) {
+        model.addAttribute("user", new User()); // untuk binding <form th:object="${user}">
+        return "login"; // file src/main/resources/templates/login.html
+    }
+
+    // Proses login (POST)
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestBody LoginRequest loginRequest) {
-        // Mengotentikasi username dan password
-        boolean isAuthenticated = userService.authenticate(loginRequest.getUsername(), loginRequest.getPassword());
+    public String loginUser(@ModelAttribute("user") User userForm, Model model, HttpSession session) {
+        User user = userRepository.findByUsername(userForm.getUsername());
 
-        if (isAuthenticated) {
-            // Membuat response dengan token jika autentikasi berhasil
-           
-            return ResponseEntity.ok(new LoginResponse("Login sudah berhasil"));
+        if (user != null && user.getPassword().equals(userForm.getPassword())) {
+            session.setAttribute("loggedInUser", user);
+            return "redirect:/dashboard"; // ganti ke halaman setelah login
         } else {
-            // Mengirimkan error dengan kelas ErrorResponse
-            return ResponseEntity.status(401).body(new ErrorResponse("Invalid username or password"));
+            model.addAttribute("error", "Username atau password salah!");
+            return "login";
         }
+    }
+
+    // Optional: logout
+    @GetMapping("/logout")
+    public String logout(HttpSession session) {
+        session.invalidate();
+        return "redirect:/login";
     }
 }
