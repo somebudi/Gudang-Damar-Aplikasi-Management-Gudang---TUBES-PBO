@@ -1,46 +1,54 @@
-
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="../styles/beranda.css">
-    </head>
-<body>
-      <div th:replace="components/navbar :: navbar"></div>
-
-    
+    <link rel="stylesheet" th:href="@{/styles/beranda.css}">
+    <title>Detail Barang</title>
     <style>
-        body{
+        body {
             background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
+            font-family: sans-serif;
         }
 
-        .card{
+        .card {
             width: 419px;
-            height: 300px;
+            height: auto;
             background-color: white;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
             padding: 20px;
             box-sizing: border-box;
-            font-family: sans-serif;
+            margin-top: 50px;
+        }
+
+        .card p {
+            margin-bottom: 10px;
+            font-size: 16px;
+        }
+
+        .card p span {
+            font-weight: bold;
         }
     </style>
-    <main>
-        <center>
+</head>
+<body>
+
+<div th:replace="components/navbar :: navbar"></div>
+
+<main>
+    <center>
         <div class="card">
-                <p style="margin-bottom: 10px;">${Barang.namaBarang}</p>
+            <p><span>Nama:</span> <span th:text="${barang.namaBarang}">Nama Barang</span></p>
+            <p><span>Merek:</span> <span th:text="${barang.merek}">Merek</span></p>
+            <p><span>Ukuran:</span> <span th:text="${barang.ukuran}">Ukuran</span></p>
+            <p><span>Ketebalan:</span> <span th:text="${barang.ketebalan}">Ketebalan</span></p>
+            <p><span>Bahan:</span> <span th:text="${barang.bahan}">Bahan</span></p>
+            <p><span>Harga:</span> Rp <span th:text="${barang.harga}">0</span></p>
+        </div>
+    </center>
+</main>
 
-                <p>Merek: ${Kategori.merek}</p>
-                <p>Ukuran: ${Kategori.ukuran}</p>
-                <p>Ketebalan: ${Kategori.ketebalan}</p>
-                <p>Bahan: ${Kategori.bahan}</p>
-            </div>
-        </center>
-    </main>
-
-     <script th:src="@{/scripts/beranda.js}" type="module"></script>
-
-    </script>
+<script th:src="@{/scripts/beranda.js}" type="module"></script>
 </body>
 </html>

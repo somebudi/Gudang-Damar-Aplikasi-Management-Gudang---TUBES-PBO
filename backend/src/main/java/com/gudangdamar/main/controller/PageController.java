@@ -1,7 +1,11 @@
 package com.gudangdamar.main.controller;
 
+import com.gudangdamar.main.repository.BarangRepository;
 import com.gudangdamar.main.model.Servis;
+import com.gudangdamar.main.model.Barang;
+import com.gudangdamar.main.model.Kategori;
 import com.gudangdamar.main.repository.ServisRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -15,8 +19,10 @@ public class PageController {
 
     @Autowired
     private ServisRepository servisRepository;
+
     @Autowired
-    private PemesananRepository pemesananRepository;
+    private BarangRepository barangRepository;
+
     @GetMapping("/")
     public String showLoginPage() {
         return "pages/login"; // templates/pages/login.html
@@ -24,16 +30,30 @@ public class PageController {
 
     @GetMapping("/halamanGudangBeranda")
     public String showGudangBeranda(Model model) {
-        List<Servis> servisList = servisRepository.findAll();
-        model.addAttribute("servisList", servisList);
+    List<Barang> barangList = barangRepository.findAll(); // ✅ Benar
+    model.addAttribute("barangList", barangList);
         return "pages/halamanGudangBeranda";
+}
+
+    @GetMapping("/halamanGudangDetail/{id}")
+    public String detailBarang(@PathVariable("id") int id, Model model) {
+    Barang barang = barangRepository.findById(id).orElse(null);
+    if (barang == null) {
+        return "redirect:/error";
     }
 
-    @GetMapping("/halamanGudangDetail")
-    public String showGudangDetail() {
-        return "pages/halamanGudangDetail";
-    }
+    model.addAttribute("barang", barang);
+    return "pages/halamanGudangDetail";
+}
 
+
+
+
+
+    @GetMapping("/halamanGudangPesanan")
+    public String showGudangPesanan() {
+        return "pages/halamanGudangPesanan";
+    }
 
     @GetMapping("/halamanGrafik")
     public String showGudangGrafik() {
@@ -41,17 +61,26 @@ public class PageController {
     }
 
     @GetMapping("/halamanGudangServis")
-public String showGudangServis(Model model) {
-    model.addAttribute("servisBaru", new Servis());
-    model.addAttribute("servisList", servisRepository.findAll());
-    return "pages/halamanGudangServis";
-}
+    public String showGudangServis(Model model) {
+        List<Servis> servisList = servisRepository.findAll();
+        model.addAttribute("servisList", servisList);
+        model.addAttribute("servisBaru", new Servis());
+        return "pages/halamanGudangServis";
+    }
 
-@GetMapping("/halamanGudangPesanan")
-public String showGudangPemesanan(Model model) {
-    model.addAttribute("pemesananBaru", new Pemesanan());
-    model.addAttribute("pemesananList", pemesananRepository.findAll());
-    return "pages/halamanGudangPesanan";
-}
+    @PostMapping
+    public String buatPemesanan(@ModelAttribute("servisBaru") Servis request,
+                                RedirectAttributes redirectAttributes) {
+        servisRepository.save(request);
+        redirectAttributes.addFlashAttribute("successMessage", "Servis berhasil ditambahkan!");
+        return "redirect:/halamanGudangServis";
+    }
 
+    @PostMapping("/delete/{id}")
+    public String hapusPemesanan(@PathVariable Long id,
+                                 RedirectAttributes redirectAttributes) {
+        servisRepository.deleteById(id);
+        redirectAttributes.addFlashAttribute("successMessage", "Servis berhasil dihapus!");
+        return "redirect:/halamanGudangServis";
+    }
 }

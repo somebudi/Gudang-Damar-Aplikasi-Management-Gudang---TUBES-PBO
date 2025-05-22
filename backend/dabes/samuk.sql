@@ -36,7 +36,7 @@ CREATE TABLE barang (
     Bentuk	VARCHAR(512),
     Bahan	VARCHAR(512),
     Harga	INT,
-    Jumlah	VARCHAR(512),
+    Jumlah	INT(255),
     Total	INT
 );
 

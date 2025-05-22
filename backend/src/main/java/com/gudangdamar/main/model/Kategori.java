@@ -1,59 +1,73 @@
 package com.gudangdamar.main.model;
-import jakarta.persistence.Embeddable;
+
+import jakarta.persistence.*;
 
 @Embeddable
-public class Kategori{
-    private float ukuran;
+public class Kategori {
+
+    @Column(name = "Ukuran")
+    private int ukuran;
+
+    @Column(name = "Bentuk")
     private String bentuk;
-    private float ketebalan;
+
+    @Column(name = "Ketebalan") // VARCHAR di SQL, jadi String di Java
+    private String ketebalan;
+
+    @Column(name = "Bahan")
     private String bahan;
+
+    @Column(name = "Guna_Merek")
     private String merek;
 
-    public Kategori(float ukuran, String bentuk, float ketebalan, String bahan, String merek){
-        this.ukuran=ukuran;
-        this.bentuk=bentuk;
-        this.ketebalan=ketebalan;
-        this.bahan=bahan;
-        this.merek=merek;
+    public Kategori() {}
+
+    public Kategori(int ukuran, String bentuk, String ketebalan, String bahan, String merek) {
+        this.ukuran = ukuran;
+        this.bentuk = bentuk;
+        this.ketebalan = ketebalan;
+        this.bahan = bahan;
+        this.merek = merek;
     }
 
-    public void setUkuran(float ukuran){
-        this.ukuran=ukuran;
-    }
-
-    public float getUkuran(){
+    // Getter & Setter
+    public int getUkuran() {
         return ukuran;
     }
 
-    public void setBentuk(String bentuk){
-        this.bentuk=bentuk;
+    public void setUkuran(int ukuran) {
+        this.ukuran = ukuran;
     }
 
-    public String getBentuk(){
+    public String getBentuk() {
         return bentuk;
     }
 
-    public void setKetebalan(float ketebalan){
-        this.ketebalan=ketebalan;
+    public void setBentuk(String bentuk) {
+        this.bentuk = bentuk;
     }
 
-    public float getketebalan(){
+    public String getKetebalan() {
         return ketebalan;
     }
 
-    public void setBahan(String bahan){
-        this.bahan=bahan;
+    public void setKetebalan(String ketebalan) {
+        this.ketebalan = ketebalan;
     }
 
-    public String getBahan(){
+    public String getBahan() {
         return bahan;
     }
 
-    public void setMerek(String merek){
-        this.merek=merek;
+    public void setBahan(String bahan) {
+        this.bahan = bahan;
     }
 
-    public String getMerek(){
+    public String getMerek() {
         return merek;
+    }
+
+    public void setMerek(String merek) {
+        this.merek = merek;
     }
 }
