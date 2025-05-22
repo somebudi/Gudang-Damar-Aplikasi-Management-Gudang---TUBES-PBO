@@ -41,27 +41,23 @@
 
     <button id="addItemButton">Tambah Jenis Barang</button>
 
-    <main>
-        <h1>Daftar </h1>
-        
-        <div class="grid-container" id="card">
-            <a th:href="@{servis/edit/{id}(id=${servis.id})}" class="btn btn-primary w-100 mb-2">Edit</a>
-
-           <div class="item" th:each="barang : ${barangList}">
-    <a th:href="@{'/halamanGudangDetail/' + ${barang.idBarang}}">
-        <div class="card-content">
-            <p><strong>Nama:</strong> <span th:text="${barang.nama}"></span></p>
-            <p><strong>Ukuran:</strong> <span th:text="${barang.kategori.ukuran}"></span></p>
-            <p><strong>Harga:</strong> <span th:text="${barang.harga}"></span></p>
+   <main>
+    <h1>Daftar</h1>
+    
+    <div class="grid-container">
+        <div class="item" th:each="barang : ${barangList}">
+            <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
+                <div class="card-content">
+                    <p><strong>Nama:</strong> <span th:text="${barang.nama}"></span></p>
+                    <p><strong>Ukuran:</strong> <span th:text="${barang.kategori.ukuran}"></span></p>
+                    <p><strong>Harga:</strong> <span th:text="${barang.harga}"></span></p>
+                </div>
+            </a>
         </div>
-    </a>
-</div>
+    </div>
+</main>
 
 
-        </div>
-
-        
-    </main>
     <div class="page-transition" id="transitionOverlay"></div>
 
     
