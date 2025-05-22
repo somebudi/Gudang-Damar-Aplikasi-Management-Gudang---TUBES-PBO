@@ -1,25 +1,42 @@
 package com.gudangdamar.main.model;
 
-import java.sql.Timestamp;
+import com.fasterxml.jackson.annotation.JsonFormat;
+import jakarta.persistence.*;
+import java.time.LocalDateTime;
 
+@Entity
+@Table(name = "pesanan")
 public class Pemesanan {
-    
-    private Barang barang; 
-    private Timestamp tanggalPemesanan;
-    private Timestamp tanggalTerkirim;
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Long id;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "tanggal_pemesanan")
+    private LocalDateTime tanggalPemesanan;
+
+    @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
+    @Column(name = "tanggal_terkirim")
+    private LocalDateTime tanggalTerkirim;
+
+    @Column(name = "catatan_pemesanan", length = 255)
     private String catatanPemesanan;
-    public Pemesanan( Barang barang, Timestamp tanggalPemesanan,Timestamp tanggalTerkirim,String catatanPemesanan) {
-       
-        this.barang = barang;
+
+    public Pemesanan() {}
+
+    public Pemesanan(LocalDateTime tanggalPemesanan, LocalDateTime tanggalTerkirim, String catatanPemesanan) {
         this.tanggalPemesanan = tanggalPemesanan;
         this.tanggalTerkirim = tanggalTerkirim;
         this.catatanPemesanan = catatanPemesanan;
-        int idBarangBaru = Integer.parseInt(String.valueOf(barang.getIdBarang()) + "25");
-        this.barang.setIdBarang(idBarangBaru);
+    }
+   
+    public Long getId() {
+    return id;
     }
 
-    public Barang getBarang() {
-        return barang;
+    public void setId(Long id) {
+        this.id = id;
     }
 
     public String getCatatanPemesanan() {
@@ -28,18 +45,18 @@ public class Pemesanan {
 
    
 
-    public Timestamp getTanggalPemesanan() {
+    public LocalDateTime getTanggalPemesanan() {
         return tanggalPemesanan;
     }
 
-    public Timestamp getTanggalTerkirim() {
+    public LocalDateTime getTanggalTerkirim() {
         return tanggalTerkirim;
     }
 
-    public void setTanggalTerkirim(Timestamp tanggalTerkirim) {
+    public void setTanggalTerkirim(LocalDateTime tanggalTerkirim) {
         this.tanggalTerkirim = tanggalTerkirim;
     }
-    public void setTanggalPemesanan(Timestamp tanggalPemesanan) {
+    public void setTanggalPemesanan(LocalDateTime tanggalPemesanan) {
         this.tanggalPemesanan = tanggalPemesanan;
     }
     public void setCatatanPemesanan(String catatanPemesanan) {
