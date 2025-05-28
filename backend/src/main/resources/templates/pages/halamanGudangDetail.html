@@ -12,8 +12,8 @@
         }
 
         .card {
+            position: relative;
             width: 419px;
-            height: auto;
             background-color: white;
             border-radius: 16px;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
@@ -30,6 +30,23 @@
         .card p span {
             font-weight: bold;
         }
+
+        .edit-button {
+            position: absolute;
+            top: 10px;
+            left: 10px;
+            background-color: #d3d3d3; /* abu-abu terang */
+            color: black;
+            padding: 6px 12px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .edit-button:hover {
+            background-color: #bcbcbc;
+        }
     </style>
 </head>
 <body>
@@ -39,15 +56,15 @@
 <main>
     <center>
         <div class="card">
-        <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
-         <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
-         <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
-         <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
-         <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
-         <p><span>Jumlah:</span> Rp <span th:text="${barang.harga.jumlah}">0</span></p>
+             <a href="editHarga.html" class="edit-button">Edit</a>
 
-</div>
-
+            <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
+            <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+            <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+            <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+            <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
+            <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
+        </div>
     </center>
 </main>
 
