@@ -1,6 +1,11 @@
 package com.gudangdamar.main.model;
-import jakarta.persistence.*;
-import java.sql.Timestamp;
+import jakarta.persistence.Column;
+import jakarta.persistence.Embedded;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.Table;
 
 @Entity
 @Table(name="barang")
@@ -13,12 +18,8 @@ public class Barang{
     @Column(name = "nama")
     private String nama;
     //private Harga hargaBarang;
-    @Column(name = "Harga")
-    private int harga;
-    @Column(name = "jumlah")
-    private int jumlah;
-    @Column(name = "Total")
-    private int total;
+    @Embedded
+    private Harga harga;
     @Embedded
     private Kategori kategori;
     // private Timestamp waktuMasuk;
@@ -27,13 +28,12 @@ public class Barang{
     // private String namaSupplier;
     public Barang() {}
 
-    public Barang(int idBarang,String nama,int harga, int jumlah, Kategori kategori,int total){
+    public Barang(int idBarang,String nama,Harga harga,Kategori kategori){
         this.idBarang=idBarang;
         this.nama=nama;
+
         this.harga=harga;
-        this.jumlah=jumlah;
-       
-        this.total=total;
+          
         this.kategori = kategori;
         // this.waktuMasuk = waktuMasuk;
         // this.waktuKeluar = waktuKeluar;
@@ -57,22 +57,13 @@ public class Barang{
         return nama;
     }
 
-    public void setHargaBarang(int harga){
+    public void setHarga(Harga harga){
         this.harga=harga;
     }
 
-    public int getHarga(){
+    public Harga getHarga(){
         return harga;
     }
-
-    public void setJumlah(int jumlah){
-        this.jumlah=jumlah;
-    }
-
-    public int getJumlah() {
-        return jumlah;
-    }
-
 
     public void setKategori(Kategori kategori){
         this.kategori=kategori;

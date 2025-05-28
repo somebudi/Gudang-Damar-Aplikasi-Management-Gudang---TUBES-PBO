@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="id" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Edit Harga & Jumlah Barang</title>
+    <style>
+        body {
+            background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
+            font-family: sans-serif;
+        }
+
+        .card {
+            width: 420px;
+            background-color: white;
+            border-radius: 16px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            padding: 20px;
+            box-sizing: border-box;
+            margin: 50px auto;
+        }
+
+        .card label {
+            display: block;
+            margin-top: 15px;
+            font-weight: bold;
+        }
+
+        .card input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            margin-top: 5px;
+            border-radius: 6px;
+            border: 1px solid #ccc;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        .card button {
+            margin-top: 20px;
+            width: 100%;
+            padding: 12px;
+            background-color: #4CAF50;
+            color: white;
+            font-size: 18px;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+        }
+
+        .card button:hover {
+            background-color: #45a049;
+        }
+    </style>
+</head>
+<body>
+
+<div th:replace="components/navbar :: navbar"></div>
+
+<main>
+    <div class="card">
+        <h2>Edit Harga dan Jumlah Barang</h2>
+        <form th:action="@{/barang/update}" th:object="${barang}" method="post">
+            <input type="hidden" th:field="*{idBarang}" />
+
+            <label for="harga">Harga (Rp):</label>
+            <input type="number" id="harga" th:field="*{harga.harga}" min="0" required />
+
+            <label for="jumlah">Jumlah:</label>
+            <input type="number" id="jumlah" th:field="*{harga.jumlah}" min="0" required />
+
+            <button type="submit">Simpan Perubahan</button>
+        </form>
+    </div>
+</main>
+
+<script th:src="@{/scripts/beranda.js}" type="module"></script>
+</body>
+</html>
