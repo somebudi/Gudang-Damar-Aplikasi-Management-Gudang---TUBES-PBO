@@ -39,13 +39,13 @@
 <main>
     <center>
         <div class="card">
-            <p><span>Nama:</span> <span th:text="${barang.namaBarang}">Nama Barang</span></p>
-            <p><span>Merek:</span> <span th:text="${barang.merek}">Merek</span></p>
-            <p><span>Ukuran:</span> <span th:text="${barang.ukuran}">Ukuran</span></p>
-            <p><span>Ketebalan:</span> <span th:text="${barang.ketebalan}">Ketebalan</span></p>
-            <p><span>Bahan:</span> <span th:text="${barang.bahan}">Bahan</span></p>
-            <p><span>Harga:</span> Rp <span th:text="${barang.harga}">0</span></p>
-        </div>
+        <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
+         <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+         <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+         <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+         <p><span>Harga:</span> Rp <span th:text="${barang.harga}">0</span></p>
+</div>
+
     </center>
 </main>
 
