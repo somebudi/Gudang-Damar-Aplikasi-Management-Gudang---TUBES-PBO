@@ -48,21 +48,11 @@ public class PageController {
     return "pages/halamanGudangDetail";
 }
 
-
-
-
-
-
-    @GetMapping("/halamanGrafik")
-    public String showGudangGrafik() {
-        return "pages/halamanGrafik";
-    }
-
     @GetMapping("/halamanGudangServis")
-public String showGudangServis(Model model) {
-    model.addAttribute("servisBaru", new Servis());
-    model.addAttribute("servisList", servisRepository.findAll());
-    return "pages/halamanGudangServis";
+    public String showGudangServis(Model model) {
+        model.addAttribute("servisBaru", new Servis());
+        model.addAttribute("servisList", servisRepository.findAll());
+        return "pages/halamanGudangServis";
 }
 
 @GetMapping("/halamanGudangPesanan")

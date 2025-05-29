@@ -17,6 +17,7 @@ public class Barang{
     private int idBarang;
     @Column(name = "nama")
     private String nama;
+
     //private Harga hargaBarang;
     @Embedded
     private Harga harga;

@@ -3,9 +3,60 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Grafik Data Barang</title>
     <link rel="stylesheet" href="../styles/beranda.css">
-    </head>
+
+    <!-- Tambahkan Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
 <body>
     <div th:replace="components/navbar :: navbar"></div>
+
+    <h1>Grafik Data Barang</h1>
+    <canvas id="barangChart" width="600" height="300"></canvas>
+
+    <script th:inline="javascript">
+        /*<![CDATA[*/
+        document.addEventListener('DOMContentLoaded', function () {
+            // Data dari Thymeleaf
+            let barangList = /*[[${barangList}]]*/ [];
+
+            // Siapkan label dan data
+            let labels = [];
+            let quantities = [];
+
+            for (let i = 0; i < barangList.length; i++) {
+                labels.push(barangList[i].nama);
+                quantities.push(barangList[i].harga.jumlah); // Pastikan struktur sesuai
+            }
+
+            let ctx = document.getElementById('barangChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Jumlah Barang',
+                        data: quantities,
+                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                        borderColor: 'rgba(75, 192, 192, 1)',
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            ticks: {
+                                stepSize: 1
+                            }
+                        }
+                    }
+                }
+            });
+        });
+        /*]]>*/
+    </script>
 </body>
 </html>
