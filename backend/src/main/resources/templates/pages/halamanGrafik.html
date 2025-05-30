@@ -8,6 +8,27 @@
 
     
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        h1 {
+            font-family: 'Poppins', sans-serif;
+            font-size: 2rem;
+            text-align: center;
+            color: #1e3d59;
+            margin-top: 30px;
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        h1::after {
+            content: '';
+            display: block;
+            width: 60px;
+            height: 4px;
+            background-color: #66ACE6;
+            margin: 10px auto 0;
+            border-radius: 2px;
+        }
+    </style>
 </head>
 <body>
     <div th:replace="components/navbar :: navbar"></div>
