@@ -10,7 +10,7 @@ public class Pemesanan {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "tanggal_pemesanan")
@@ -31,12 +31,12 @@ public class Pemesanan {
         this.catatanPemesanan = catatanPemesanan;
     }
    
-    public Long getId() {
+    public int getId() {
     return id;
     }
 
-    public void setId(Long id) {
-        this.id = id;
+    public void setId(int idCustom) {
+        this.id = idCustom;
     }
 
     public String getCatatanPemesanan() {

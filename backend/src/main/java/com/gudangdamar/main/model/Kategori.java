@@ -11,7 +11,7 @@ public class Kategori {
     @Column(name = "Bentuk")
     private String bentuk;
 
-    @Column(name = "Ketebalan") // VARCHAR di SQL, jadi String di Java
+    @Column(name = "Ketebalan")
     private String ketebalan;
 
     @Column(name = "Bahan")
