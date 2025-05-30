@@ -1,73 +1,134 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" th:href="@{/styles/beranda.css}">
-    <title>Detail Barang</title>
-    <style>
-        body {
-            background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
-            font-family: sans-serif;
-        }
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link rel="stylesheet" th:href="@{/styles/beranda.css}" />
+  <title>Detail Barang</title>
+  <style>
+    body {
+      background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
+      font-family: sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-        .card {
-            position: relative;
-            width: 419px;
-            background-color: white;
-            border-radius: 16px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            padding: 20px;
-            box-sizing: border-box;
-            margin-top: 50px;
-        }
+    .btn-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 20px 24px 0;
+    }
 
-        .card p {
-            margin-bottom: 10px;
-            font-size: 16px;
-        }
+    .btn-tambah {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      border: none;
+      color: white;
+      padding: 10px 20px;
+      font-size: 15px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(37, 117, 252, 0.4);
+      transition: all 0.3s ease;
+    }
 
-        .card p span {
-            font-weight: bold;
-        }
+    .btn-tambah:hover {
+      background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+      transform: translateY(-2px);
+    }
 
-        .edit-button {
-            position: absolute;
-            top: 10px;
-            left: 10px;
-            background-color: #d3d3d3; /* abu-abu terang */
-            color: black;
-            padding: 6px 12px;
-            border-radius: 8px;
-            text-decoration: none;
-            font-size: 14px;
-            font-weight: bold;
-        }
+    .delete-btn {
+      background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);
+      box-shadow: 0 6px 15px rgba(249, 212, 35, 0.4);
+      color: white;
+    }
 
-        .edit-button:hover {
-            background-color: #bcbcbc;
-        }
-    </style>
+    .delete-btn:hover {
+      background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
+      box-shadow: 0 8px 20px rgba(249, 212, 35, 0.6);
+    }
+
+    .card {
+      position: relative;
+      width: 419px;
+      background-color: white;
+      border-radius: 16px;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+      padding: 20px;
+      box-sizing: border-box;
+      margin-top: 30px;
+    }
+
+    .card p {
+      margin-bottom: 10px;
+      font-size: 16px;
+    }
+
+    .card p span {
+      font-weight: bold;
+    }
+
+    .edit-button {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background-color: #d3d3d3;
+      color: black;
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+      font-size: 14px;
+      font-weight: bold;
+    }
+
+    .edit-button:hover {
+      background-color: #bcbcbc;
+    }
+
+    main {
+      padding: 10px;
+    }
+
+    @media (max-width: 480px) {
+      .card {
+        width: 90%;
+        margin-top: 20px;
+      }
+
+      .btn-wrapper {
+        flex-direction: column;
+        gap: 8px;
+        padding-left: 16px;
+      }
+    }
+  </style>
 </head>
 <body>
 
-<div th:replace="components/navbar :: navbar"></div>
+  <div th:replace="components/navbar :: navbar"></div>
 
-<main>
+  <!-- Tombol Delete -->
+  <div class="btn-wrapper">
+    <button type="button" class="btn-tambah delete-btn">Delete Jenis Barang</button>
+  </div>
+
+  <main>
     <center>
-        <div class="card">
-             <a href="editHarga.html" class="edit-button">Edit</a>
+      <div class="card">
+        <a th:href="@{/editHarga/{id}(id=${barang.idBarang})}" class="edit-button">Edit</a>
 
-            <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
-            <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
-            <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
-            <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
-            <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
-            <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
-        </div>
+        <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
+        <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+        <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+        <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+        <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
+        <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
+      </div>
     </center>
-</main>
+  </main>
 
-<script th:src="@{/scripts/beranda.js}" type="module"></script>
+  <script th:src="@{/scripts/beranda.js}" type="module"></script>
+
 </body>
 </html>
