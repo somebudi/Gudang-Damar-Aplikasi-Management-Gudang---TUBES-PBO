@@ -27,12 +27,12 @@ public class PageController {
     private PemesananRepository pemesananRepository;
     @GetMapping("/")
     public String showLoginPage() {
-        return "pages/login"; // templates/pages/login.html
+        return "pages/login"; 
     }
 
     @GetMapping("/halamanGudangBeranda")
     public String showGudangBeranda(Model model) {
-    List<Barang> barangList = barangRepository.findAll(); // ✅ Benar
+    List<Barang> barangList = barangRepository.findAll(); 
     model.addAttribute("barangList", barangList);
         return "pages/halamanGudangBeranda";
 }

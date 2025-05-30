@@ -19,17 +19,17 @@ public class User {
     @Column(nullable = false)
     private String role;
 
-    // Constructor
+
     public User(String username, String password, String role) {
         this.username = username;
         this.password = password;
         this.role = role;
     }
 
-    // Default constructor (required for JPA)
+   
     public User() {}
 
-    // Getter dan Setter
+
     public Long getId() {
         return id;
     }
@@ -66,7 +66,7 @@ public class User {
         this.role = role;
     }
 
-    // Method untuk login (bisa dihapus jika tidak diperlukan di model)
+  
     public boolean login(String username, String password) {
         return this.username.equals(username) && this.password.equals(password);
     }

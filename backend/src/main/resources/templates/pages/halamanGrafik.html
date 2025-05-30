@@ -6,7 +6,7 @@
     <title>Grafik Data Barang</title>
     <link rel="stylesheet" href="../styles/beranda.css">
 
-    <!-- Tambahkan Chart.js -->
+    
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </head>
 <body>
@@ -16,18 +16,18 @@
     <canvas id="barangChart" width="600" height="300"></canvas>
 
     <script th:inline="javascript">
-        /*<![CDATA[*/
+       
         document.addEventListener('DOMContentLoaded', function () {
-            // Data dari Thymeleaf
+           
             let barangList = /*[[${barangList}]]*/ [];
 
-            // Siapkan label dan data
+           
             let labels = [];
             let quantities = [];
 
             for (let i = 0; i < barangList.length; i++) {
                 labels.push(barangList[i].nama);
-                quantities.push(barangList[i].harga.jumlah); // Pastikan struktur sesuai
+                quantities.push(barangList[i].harga.jumlah); 
             }
 
             let ctx = document.getElementById('barangChart').getContext('2d');
@@ -56,7 +56,7 @@
                 }
             });
         });
-        /*]]>*/
+       
     </script>
 </body>
 </html>
