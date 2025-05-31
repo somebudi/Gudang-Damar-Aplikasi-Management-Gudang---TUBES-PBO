@@ -1,16 +1,21 @@
 package com.gudangdamar.main.controller;
 
+import java.util.Optional;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.servlet.mvc.support.RedirectAttributes;
+
 import com.gudangdamar.main.model.Barang;
 import com.gudangdamar.main.model.Harga;
 import com.gudangdamar.main.model.Kategori;
 import com.gudangdamar.main.repository.BarangRepository;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
-import org.springframework.web.servlet.mvc.support.RedirectAttributes;
-
-import java.util.Optional;
 
 @Controller
 public class BarangController {
@@ -107,4 +112,26 @@ public String updatedBarang(@PathVariable int id, @ModelAttribute Barang barangF
     redirectAttributes.addFlashAttribute("success", "Data barang berhasil diperbarui.");
     return "redirect:/halamanGudangDetail/" + barang.getIdBarang();
 }
+@PostMapping("/barang/updateJumlah/{id}")
+public String updateJumlah(@PathVariable int id, @RequestParam int jumlah, RedirectAttributes redirectAttributes) {
+    Optional<Barang> optionalBarang = barangRepository.findById(id);
+    if (optionalBarang.isEmpty()) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Data barang tidak ditemukan.");
+        return "redirect:/halamanGudangBeranda";
+    }
+
+    Barang barang = optionalBarang.get();
+    if (barang.getHarga() == null) {
+        barang.setHarga(new Harga());
+    }
+
+    barang.getHarga().setJumlah(jumlah);
+    barang.getHarga().hitungTotalHarga();
+
+    barangRepository.save(barang);
+
+    redirectAttributes.addFlashAttribute("success", "Jumlah barang berhasil diperbarui.");
+    return "redirect:/halamanGudangDetail/" + id;
+}
+
 }
