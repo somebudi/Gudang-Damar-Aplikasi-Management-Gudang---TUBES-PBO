@@ -100,7 +100,17 @@
       font-size: 24px;
       font-weight: bold;
       cursor: pointer;
+      top: -10px;
+      margin: 0;
     }
+    .jumlah-wrapper button:first-child {
+      margin-right: 10px; /* jarak dari tombol minus ke input */
+    }
+    /* Margin kiri untuk tombol plus */
+    .jumlah-wrapper button.btn-plus {
+      margin-left: 10px; /* jarak dari tombol plus ke input */
+    }
+
     .btn-simpan-wrapper {
       margin-top: 12px;
       display: flex;
@@ -145,19 +155,18 @@
         <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
         <p><span>Total:</span> Rp <span th:text="${#numbers.formatDecimal(barang.harga.total, 0, 'COMMA', 2, 'POINT')}">0</span></p>
 
-        <form th:action="@{/barang/updateJumlah/{id}(id=${barang.idBarang})}" method="post">
+         <form th:action="@{/barang/updateJumlah/{id}(id=${barang.idBarang})}" method="post">
           <label for="jumlah">Ubah Jumlah:</label>
           <div class="jumlah-wrapper">
-            <button type="button" onclick="ubahJumlah(-1)">&#x2796;</button> 
-            <center>
+            <button type="button" onclick="ubahJumlah(-1)">&#x2796;</button> <!-- Minus icon -->
             <input type="number" id="jumlah" name="jumlah" th:value="${barang.harga.jumlah}" min="0" required />
-            
-            <button type="button" onclick="ubahJumlah(1)">&#x2795;</button> 
+            <button type="button" class="btn-plus" onclick="ubahJumlah(1)">&#x2795;</button> <!-- Plus icon -->
           </div>
           <div class="btn-simpan-wrapper">
             <button type="submit" class="btn-tambah">Simpan Jumlah</button>
           </div>
         </form>
+
       </div>
     </center>
      <div th:replace="components/listBarang :: listBarang(${barangList})"></div>
