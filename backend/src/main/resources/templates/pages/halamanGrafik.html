@@ -1,96 +1,184 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Grafik Data Barang</title>
-    <link rel="stylesheet" href="../styles/beranda.css">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grafik Data Barang</title>
+  <link rel="stylesheet" href="../styles/beranda.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
-    
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <style>
-        h1 {
-            font-family: 'Poppins', sans-serif;
-            font-size: 2rem;
-            text-align: center;
-            color: #1e3d59;
-            margin-top: 30px;
-            margin-bottom: 20px;
-            position: relative;
-        }
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      margin: 0;
+      padding: 0;
+    }
 
-        h1::after {
-            content: '';
-            display: block;
-            width: 60px;
-            height: 4px;
-            background-color: #66ACE6;
-            margin: 10px auto 0;
-            border-radius: 2px;
-        }
-    </style>
+    h1 {
+      font-size: 2rem;
+      text-align: center;
+      color: #1e3d59;
+      margin-top: 30px;
+      margin-bottom: 20px;
+      position: relative;
+    }
+
+    h1::after {
+      content: '';
+      display: block;
+      width: 60px;
+      height: 4px;
+      background-color: #66ACE6;
+      margin: 10px auto 0;
+      border-radius: 2px;
+    }
+
+    .main-container {
+      display: flex;
+      padding: 20px;
+    }
+
+    .left-section {
+      flex: 3;
+      padding-right: 20px;
+    }
+
+    .chart-box {
+      background: white;
+      border: 1px solid #ddd;
+      padding: 10px;
+      border-radius: 6px;
+    }
+
+    .dropdown-section {
+      margin-top: 10px;
+    }
+
+    .grid-gallery {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 10px;
+      margin-top: 20px;
+    }
+
+    .grid-item {
+      background-color: #ccc;
+      height: 100px;
+      border-radius: 6px;
+    }
+
+    .right-sidebar {
+      flex: 1;
+      border-left: 1px solid #ccc;
+      padding-left: 20px;
+    }
+
+    .riwayat-title {
+      font-weight: bold;
+      margin-bottom: 10px;
+    }
+
+    .riwayat-box {
+      height: 400px;
+      overflow-y: auto;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+      padding: 10px;
+    }
+  </style>
 </head>
 <body>
-    <div th:replace="components/navbar :: navbar"></div>
+  <div th:replace="components/navbar :: navbar"></div>
 
-    <h1>Grafik Data Barang</h1>
-    <canvas id="barangChart" width="100" height="50"></canvas>
 
-    <script th:inline="javascript">
-       
-        document.addEventListener('DOMContentLoaded', function () {
-           
-            let barangList = /*[[${barangList}]]*/ [];
+  <div class="main-container">
+    
+    <div class="left-section">
+        <div class="dropdown-section">
+          <label for="dropdown">Days Moon blabla</label>
+          <select id="dropdown">
+            <option>Opsi 1</option>
+            <option>Opsi 2</option>
+          </select>
+        </div>
+      <div class="chart-box">
+        <canvas id="barangChart" width="100" height="50"></canvas>
+        
+      </div>
 
-           
-            let labels = [];
-            let quantities = [];
+      
+    </div>
 
-            let mapBarang = {};
+<div class="right-sidebar">
+ <form method="get" action="/riwayat" id="filterForm">
+  <label for="filter">Filter Riwayat:</label>
+  <select id="filter" name="filter" onchange="document.getElementById('filterForm').submit()">
+    <option value="all" th:selected="${filter == 'all'}">All</option>
+    <option value="barang" th:selected="${filter == 'barang'}">Barang</option>
+    <option value="servis" th:selected="${filter == 'servis'}">Servis</option>
+    <option value="pemesanan" th:selected="${filter == 'pemesanan'}">Pemesanan</option>
+  </select>
+</form>
+<div class="riwayat-box">
+  <div th:each="item : ${riwayatList}" 
+       style="height: auto; background-color: #ddd; margin-bottom: 10px; padding: 10px; border-radius: 4px;">
+    <p th:text="${item.deskripsi}">Deskripsi riwayat</p>
+    <small>
+      <span th:if="${item.waktuMulai != null}" 
+            th:text="|Mulai: ${#dates.format(item.waktuMulai, 'dd-MM-yyyy HH:mm')}|"></span><br/>
+      <span th:if="${item.waktuSelesai != null}" 
+            th:text="|Selesai: ${#dates.format(item.waktuSelesai, 'dd-MM-yyyy HH:mm')}|"></span>
+    </small>
+  </div>
+</div>
 
-            for (let i = 0; i < barangList.length; i++) {
-                let nama = barangList[i].nama;
-                let jumlah = barangList[i].harga.jumlah;
-                
-                if (mapBarang[nama]) {
-                    mapBarang[nama] += jumlah;
-                } else {
-                    mapBarang[nama] = jumlah;
-                }
+
+
+  <script th:inline="javascript">
+    document.addEventListener('DOMContentLoaded', function () {
+      let barangList = /*[[${barangList}]]*/ [];
+
+      let labels = [];
+      let quantities = [];
+      let mapBarang = {};
+
+      for (let i = 0; i < barangList.length; i++) {
+        let nama = barangList[i].nama;
+        let jumlah = barangList[i].harga.jumlah;
+        mapBarang[nama] = (mapBarang[nama] || 0) + jumlah;
+      }
+
+      for (let nama in mapBarang) {
+        labels.push(`${nama}\u000A(${mapBarang[nama]})`);
+        quantities.push(mapBarang[nama]);
+      }
+
+      let ctx = document.getElementById('barangChart').getContext('2d');
+      new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: labels,
+          datasets: [{
+            label: 'Jumlah Barang',
+            data: quantities,
+            backgroundColor: 'rgba(0, 101, 248, 0.5)',
+            borderColor: 'rgba(0, 101, 248, 1)',
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          scales: {
+            y: {
+              beginAtZero: true,
+              ticks: {
+                stepSize: 1
+              }
             }
-
-            for (let nama in mapBarang) {
-                labels.push(nama);
-                quantities.push(mapBarang[nama]);
-            }
-
-            let ctx = document.getElementById('barangChart').getContext('2d');
-            new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: labels,
-                    datasets: [{
-                        label: 'Jumlah Barang',
-                        data: quantities,
-                        backgroundColor: 'rgba(0, 101, 248, 0.5)',
-                        borderColor: 'rgba(0, 101, 248, 1)',
-                        borderWidth: 1
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    scales: {
-                        y: {
-                            beginAtZero: true,
-                            ticks: {
-                                stepSize: 1
-                            }
-                        }
-                    }
-                }
-            });
-        });
-       
-    </script>
+          }
+        }
+      });
+    });
+  </script>
 </body>
 </html>

@@ -31,7 +31,6 @@ public class Servis {
         this.catatanPemesanan = catatanPemesanan;
     }
 
-    // Getter & Setter
 
     public Long getId() {
         return id;

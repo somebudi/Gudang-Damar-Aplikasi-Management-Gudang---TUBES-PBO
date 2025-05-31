@@ -3,6 +3,8 @@ package com.gudangdamar.main.model;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+
 @Entity
 @Table(name = "barang")
 public class Barang {
@@ -32,13 +34,15 @@ public class Barang {
 
     @Column(name = "stok")
     private int stok;
-
+     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "waktu_keluar")
     private LocalDateTime waktuKeluar;
 
+     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "waktu_masuk")
     private LocalDateTime waktuMasuk;
 
+     @JsonFormat(pattern = "yyyy-MM-dd'T'HH:mm:ss")
     @Column(name = "waktu_pendataan")
     private LocalDateTime waktuPendataan;
 
