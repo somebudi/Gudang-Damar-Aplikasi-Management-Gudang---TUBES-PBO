@@ -81,57 +81,66 @@ public class BarangController {
         return "pages/editBarang";
     }
 
-   @PostMapping("barang/update/{id}")
-public String updatedBarang(@PathVariable int id, @ModelAttribute Barang barangForm, RedirectAttributes redirectAttributes) {
-    Optional<Barang> optionalBarang = barangRepository.findById(id);
-    if (optionalBarang.isEmpty()) {
-        redirectAttributes.addFlashAttribute("errorMessage", "Data barang tidak ditemukan.");
-        return "redirect:/halamanGudangBeranda";
+    @PostMapping("barang/update/{id}")
+    public String updatedBarang(@PathVariable int id, @ModelAttribute Barang barangForm, RedirectAttributes redirectAttributes) {
+        Optional<Barang> optionalBarang = barangRepository.findById(id);
+        if (optionalBarang.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Data barang tidak ditemukan.");
+            return "redirect:/halamanGudangBeranda";
+        }
+
+        Barang barang = optionalBarang.get();
+
+        barang.setNama(barangForm.getNama());
+
+        if (barang.getKategori() == null) {
+            barang.setKategori(new Kategori());
+        }
+        barang.getKategori().setUkuran(barangForm.getKategori().getUkuran());
+        barang.getKategori().setKetebalan(barangForm.getKategori().getKetebalan());
+        barang.getKategori().setBahan(barangForm.getKategori().getBahan());
+
+        if (barang.getHarga() == null) {
+            barang.setHarga(new Harga());
+        }
+        barang.getHarga().setHarga(barangForm.getHarga().getHarga());
+        barang.getHarga().setJumlah(barangForm.getHarga().getJumlah());
+        barang.getHarga().hitungTotalHarga();
+
+        barangRepository.save(barang);
+
+        redirectAttributes.addFlashAttribute("success", "Data barang berhasil diperbarui.");
+        return "redirect:/halamanGudangDetail/" + barang.getIdBarang();
     }
+    @PostMapping("/barang/updateJumlah/{id}")
+    public String updateJumlah(@PathVariable int id, @RequestParam int jumlah, RedirectAttributes redirectAttributes) {
+        Optional<Barang> optionalBarang = barangRepository.findById(id);
+        if (optionalBarang.isEmpty()) {
+            redirectAttributes.addFlashAttribute("errorMessage", "Data barang tidak ditemukan.");
+            return "redirect:/halamanGudangBeranda";
+        }
 
-    Barang barang = optionalBarang.get();
+        Barang barang = optionalBarang.get();
+        if (barang.getHarga() == null) {
+            barang.setHarga(new Harga());
+        }
 
-    barang.setNama(barangForm.getNama());
+        barang.getHarga().setJumlah(jumlah);
+        barang.getHarga().hitungTotalHarga();
 
-    if (barang.getKategori() == null) {
-        barang.setKategori(new Kategori());
+        barangRepository.save(barang);
+
+        redirectAttributes.addFlashAttribute("success", "Jumlah barang berhasil diperbarui.");
+        return "redirect:/halamanGudangDetail/" + id;
     }
-    barang.getKategori().setUkuran(barangForm.getKategori().getUkuran());
-    barang.getKategori().setKetebalan(barangForm.getKategori().getKetebalan());
-    barang.getKategori().setBahan(barangForm.getKategori().getBahan());
+    @GetMapping("/barang/cari")
+    public String cariBarang(@RequestParam("nama") String nama, Model model) {
+        if (nama == null || nama.isBlank()) {
+            model.addAttribute("error", "Nama barang tidak boleh kosong");
+            return "pages/halamanGudangBeranda";
+        }
 
-    if (barang.getHarga() == null) {
-        barang.setHarga(new Harga());
+        model.addAttribute("barangList", barangRepository.findByNamaContainingIgnoreCase(nama));
+        return "pages/halamanGudangBeranda";
     }
-    barang.getHarga().setHarga(barangForm.getHarga().getHarga());
-    barang.getHarga().setJumlah(barangForm.getHarga().getJumlah());
-    barang.getHarga().hitungTotalHarga();
-
-    barangRepository.save(barang);
-
-    redirectAttributes.addFlashAttribute("success", "Data barang berhasil diperbarui.");
-    return "redirect:/halamanGudangDetail/" + barang.getIdBarang();
-}
-@PostMapping("/barang/updateJumlah/{id}")
-public String updateJumlah(@PathVariable int id, @RequestParam int jumlah, RedirectAttributes redirectAttributes) {
-    Optional<Barang> optionalBarang = barangRepository.findById(id);
-    if (optionalBarang.isEmpty()) {
-        redirectAttributes.addFlashAttribute("errorMessage", "Data barang tidak ditemukan.");
-        return "redirect:/halamanGudangBeranda";
-    }
-
-    Barang barang = optionalBarang.get();
-    if (barang.getHarga() == null) {
-        barang.setHarga(new Harga());
-    }
-
-    barang.getHarga().setJumlah(jumlah);
-    barang.getHarga().hitungTotalHarga();
-
-    barangRepository.save(barang);
-
-    redirectAttributes.addFlashAttribute("success", "Jumlah barang berhasil diperbarui.");
-    return "redirect:/halamanGudangDetail/" + id;
-}
-
 }

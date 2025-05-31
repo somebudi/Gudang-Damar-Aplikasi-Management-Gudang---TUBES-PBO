@@ -1,113 +1,127 @@
-<!DOCTYPE html>
-<html lang="id">
-<head>
-  <meta charset="UTF-8">
-  <title>Popup Tengah - Pencarian Barang</title>
+<div th:fragment="search">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
+  body {
+    font-family: Arial, sans-serif;
+  }
 
-    .search-button {
-      position: fixed;
-      top: 20px;
-      left: 20px;
-      width: 40px;
-      height: 40px;
-      border: none;
-      background: none;
-      cursor: pointer;
-      z-index: 100;
-    }
+  .search-button {
 
-    .search-button img {
-      width: 100%;
-      height: 100%;
-    }
+    position:fixed;
+    top: 20px;
+    right: 20px;
+    width: 40px;
+    height: 40px;
+    border: none;
+    background: none;
+    cursor: pointer;
+    z-index: 100;
+    background-color: black;
+  }
 
-    .overlay {
-      display: none;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100vw;
-      height: 100vh;
-      background: rgba(0, 0, 0, 0.5);
-      z-index: 200;
-      justify-content: center;
-      align-items: center;
-    }
+  .search-button img {
+    width: 100%;
+    height: 100%;
+  }
 
-    .overlay.active {
-      display: flex;
-    }
+  .overlay {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background: rgba(0, 0, 0, 0.5);
+    z-index: 200;
+    justify-content: center;
+    align-items: center;
+  }
 
-    .popup-panel {
-      background-color: white;
-      border-radius: 10px;
-      padding: 30px;
-      width: 500px;
-      max-width: 90%;
-      box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
-      animation: fadeIn 0.3s ease;
-    }
+  .overlay.active {
+    display: flex;
+  }
 
-    @keyframes fadeIn {
-      from {
-        transform: scale(0.8);
-        opacity: 0;
-      }
-      to {
-        transform: scale(1);
-        opacity: 1;
-      }
-    }
+  .popup-panel {
+    background-color: white;
+    border-radius: 10px;
+    padding: 30px;
+    width: 500px;
+    max-width: 90%;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    animation: fadeIn 0.3s ease;
+  }
 
-    .search-input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
+  @keyframes fadeIn {
+    from {
+      transform: scale(0.8);
+      opacity: 0;
     }
-
-    .button-grid {
-      display: flex;
-      gap: 20px;
+    to {
+      transform: scale(1);
+      opacity: 1;
     }
+  }
 
-    .filter-column {
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-    }
+  .search-input {
+    width: 100%;
+    padding: 10px;
+    border-radius: 20px;
+    border: 1px solid #ccc;
+    margin-bottom: 20px;
+  }
 
-    .filter-button {
-      padding: 8px 16px;
-      background-color: #dcdcdc;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background-color 0.2s;
-    }
+  .button-grid {
+    display: flex;
+    gap: 20px;
+  }
 
-    .filter-button:hover {
-      background-color: #bcbcbc;
-    }
-  </style>
-</head>
-<body>
+  .filter-column {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
 
+  .filter-button {
+    padding: 8px 16px;
+    background-color: #dcdcdc;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+  .filter-button:hover {
+    background-color: #bcbcbc;
+  }
+  .search-button{
+    padding: 8px 16px;
+    background-color: #66ACE6;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+  .search-button:hover {
+    background-color: #444;
+  }
+  .submit {
+    padding: 8px 16px;
+    background-color: #66ACE6;
+    border: none;
+    border-radius: 20px;
+    cursor: pointer;
+    transition: background-color 0.2s;
+  }
+
+</style>
   <!-- Tombol Search -->
   <button class="search-button" onclick="openPopup()">
-    <img src="search-icon.png" alt="Cari">
+    <!-- <img th:src="@{/gambar/LogoDamar.jpeg}" width="70" height="70" alt ="Cari"> -->
   </button>
 
   <!-- Overlay dan Popup -->
   <div id="overlay" class="overlay" onclick="checkOutsideClick(event)">
     <div class="popup-panel">
-      <input type="text" class="search-input" id="searchInput" placeholder="Masukkan nama barang">
-
+      <input type="text" class="search-input" id="searchInput" placeholder="Masukkan nama barang" oninput="searchBarang()">
       <div class="button-grid">
         <div class="filter-column">
           <button class="filter-button">Huruf A-Z</button>
@@ -122,10 +136,10 @@
           <button class="filter-button">Material</button>
           <button class="filter-button">Brand</button>
         </div>
+        <button type="button" class="submit" onclick="searchBarang()">Cari</button>
       </div>
     </div>
   </div>
-
   <script>
     function openPopup() {
       document.getElementById('overlay').classList.add('active');
@@ -142,15 +156,15 @@
       }
     }
     function searchBarang() {
-    const keyword = document.getElementById('searchInput').value;
-    fetch(`/api/barang/search?keyword=${encodeURIComponent(keyword)}`)
+      const keyword = document.getElementById('searchInput').value;
+      fetch(`/api/barang/search?keyword=${encodeURIComponent(keyword)}`)
         .then(response => response.json())
         .then(data => {
-            // Kirim hasil ke halaman utama (parent)
-            window.parent.postMessage({ type: 'updateBarang', barangList: data }, '*');
+          window.parent.postMessage({ type: 'updateBarang', barangList: data }, '*');
         });
-  }
+    }
   </script>
+</div>
+</div>
 
-</body>
-</html>
+
