@@ -1,5 +1,6 @@
 package com.gudangdamar.main.controller;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,33 +34,38 @@ public class BarangController {
     }
 
     @PostMapping("/barang/save")
-    public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redirectAttributes) {
-        if (barang.getNama() == null || barang.getNama().isBlank()) {
-            redirectAttributes.addFlashAttribute("error", "Nama barang tidak boleh kosong");
-            return "redirect:/barang/tambah";
-        }
-
-        if (barang.getHarga() == null) {
-            barang.setHarga(new Harga());
-        }
-
-        if (barang.getKategori() == null) {
-            barang.setKategori(new Kategori());
-        }
-
-        if (barang.getHarga().getHarga() <= 0 || barang.getHarga().getJumlah() <= 0) {
-            redirectAttributes.addFlashAttribute("error", "Harga dan jumlah harus lebih dari 0");
-            return "redirect:/barang/tambah";
-        }
-
-        barang.getHarga().hitungTotalHarga();
-
-        Barang saved = barangRepository.save(barang);
-        redirectAttributes.addFlashAttribute("success", "Barang berhasil disimpan dengan ID: " + saved.getIdBarang());
-        return "redirect:/halamanGudangDetail/" + saved.getIdBarang();
+public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redirectAttributes) {
+    if (barang.getNama() == null || barang.getNama().isBlank()) {
+        redirectAttributes.addFlashAttribute("error", "Nama barang tidak boleh kosong");
+        return "redirect:/barang/tambah";
     }
 
-    @PostMapping("barang/delete/{id}")
+    if (barang.getHarga() == null) {
+        barang.setHarga(new Harga());
+    }
+
+    if (barang.getKategori() == null) {
+        barang.setKategori(new Kategori());
+    }
+
+    if (barang.getHarga().getHarga() <= 0 || barang.getHarga().getJumlah() <= 0) {
+        redirectAttributes.addFlashAttribute("error", "Harga dan jumlah harus lebih dari 0");
+        return "redirect:/barang/tambah";
+    }
+
+    barang.getHarga().hitungTotalHarga();
+
+    if (barang.getWaktuMasuk() == null) {
+        barang.setWaktuMasuk(LocalDateTime.now());
+    }
+
+    barang.setWaktuPendataan(LocalDateTime.now());
+
+    Barang saved = barangRepository.save(barang);
+    redirectAttributes.addFlashAttribute("success", "Barang berhasil disimpan dengan ID: " + saved.getIdBarang());
+    return "redirect:/halamanGudangDetail/" + saved.getIdBarang();
+}
+ @PostMapping("barang/delete/{id}")
     public String deleteBarang(@PathVariable int id, RedirectAttributes redirectAttributes) {
         if (barangRepository.existsById(id)) {
             barangRepository.deleteById(id);
