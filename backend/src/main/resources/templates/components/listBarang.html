@@ -1,0 +1,12 @@
+<!-- components/listBarang.html -->
+<div th:fragment="listBarang (barangList)">
+  <h2 style="text-align: center; margin-top: 40px;">Daftar Barang Lainnya</h2>
+  <div style="display: flex; flex-wrap: wrap; justify-content: center; gap: 20px; margin-top: 20px;">
+    <div class="card" th:each="barang : ${barangList}">
+      <a th:href="@{/halamanGudangDetail/{id}(id=${barang.idBarang})}" class="edit-button">Lihat</a>
+      <p><span>Nama:</span> <span th:text="${barang.nama}">Nama</span></p>
+      <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+      <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
+    </div>
+  </div>
+</div>
