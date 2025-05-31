@@ -12,14 +12,12 @@
       margin: 0;
       padding: 0;
     }
-
     .btn-wrapper {
       display: flex;
       justify-content: flex-start;
       gap: 12px;
       padding: 20px 24px 0;
     }
-
     .btn-tambah {
       background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
       border: none;
@@ -32,23 +30,19 @@
       box-shadow: 0 6px 15px rgba(37, 117, 252, 0.4);
       transition: all 0.3s ease;
     }
-
     .btn-tambah:hover {
       background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
       transform: translateY(-2px);
     }
-
     .delete-btn {
       background: linear-gradient(135deg, #ff4e50 0%, #f9d423 100%);
       box-shadow: 0 6px 15px rgba(249, 212, 35, 0.4);
       color: white;
     }
-
     .delete-btn:hover {
       background: linear-gradient(135deg, #f9d423 0%, #ff4e50 100%);
       box-shadow: 0 8px 20px rgba(249, 212, 35, 0.6);
     }
-
     .card {
       position: relative;
       width: 419px;
@@ -59,16 +53,13 @@
       box-sizing: border-box;
       margin-top: 30px;
     }
-
     .card p {
       margin-bottom: 10px;
       font-size: 16px;
     }
-
     .card p span {
       font-weight: bold;
     }
-
     .edit-button {
       position: absolute;
       top: 10px;
@@ -81,21 +72,17 @@
       font-size: 14px;
       font-weight: bold;
     }
-
     .edit-button:hover {
       background-color: #bcbcbc;
     }
-
     main {
       padding: 10px;
     }
-
     @media (max-width: 480px) {
       .card {
         width: 90%;
         margin-top: 20px;
       }
-
       .btn-wrapper {
         flex-direction: column;
         gap: 8px;
@@ -108,26 +95,25 @@
 
   <div th:replace="components/navbar :: navbar"></div>
 
-  <!-- Tombol Delete -->
   <div class="btn-wrapper">
-    <button type="button" class="btn-tambah delete-btn" onclick="window.location.href='/barang/delete'"></button>Delete Jenis Barang</button>
+    <form th:action="@{/barang/delete/{id}(id=${barang.idBarang})}" method="post" 
+          onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?');">
+      <button type="submit" class="btn-tambah delete-btn">Delete Jenis Barang</button>
+    </form>
   </div>
-
 
   <main>
     <center>
       <div class="card">
-  <a th:href="@{/editHarga/{id}(id=${barang.idBarang})}" class="edit-button">Edit</a>
-
-  <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
-  <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
-  <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
-  <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
-  <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
-  <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
-  <p><span>Total:</span> Rp <span th:text="${barang.harga.total}">0</span></p>
-</div>
-
+        <a th:href="@{/barang/edit/{id}(id=${barang.idBarang})}" class="edit-button">Edit</a>
+        <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
+        <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+        <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+        <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+        <p><span>Harga:</span> Rp <span th:text="${#numbers.formatDecimal(barang.harga.harga, 0, 'COMMA', 2, 'POINT')}">0</span></p>
+        <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
+        <p><span>Total:</span> Rp <span th:text="${#numbers.formatDecimal(barang.harga.total, 0, 'COMMA', 2, 'POINT')}">0</span></p>
+      </div>
     </center>
   </main>
 

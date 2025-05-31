@@ -30,7 +30,6 @@ public class Kategori {
         this.merek = merek;
     }
 
-    // Getter & Setter
     public int getUkuran() {
         return ukuran;
     }
