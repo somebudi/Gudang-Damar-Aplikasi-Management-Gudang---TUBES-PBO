@@ -182,22 +182,25 @@
   <header th:replace="components/navbar :: navbar"></header>
 
   <div class="btn-wrapper">
-    <button type="button" class="btn-tambah">Tambah Jenis Barang</button>
-    
-  </div>
+  <button type="button" class="btn-tambah" onclick="window.location.href='/barang/tambah'">Tambah Jenis Barang</button>
+</div>
+
 
   <main>
     <div class="grid-container">
-      <div class="card" th:each="barang : ${barangList}">
-        <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
-          <div class="card-content">
-            <strong th:text="'Nama: ' + ${barang.nama}"></strong>
-            <p th:text="'Ukuran: ' + ${barang.kategori.ukuran}"></p>
-            <p th:text="'Harga: Rp ' + ${barang.harga}"></p>
-          </div>
-        </a>
+  <div class="card" th:each="barang : ${barangList}">
+    <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
+      <div class="card-content">
+        <strong th:text="'Nama: ' + ${barang.nama}"></strong>
+        <p th:text="'Ukuran: ' + ${barang.kategori.ukuran}"></p>
+        <p th:text="'Harga: Rp ' + ${barang.harga.harga}"></p>
+        <p th:text="'Jumlah: ' + ${barang.harga.jumlah}"></p>
+        <p th:text="'Total: Rp ' + ${barang.harga.total}"></p>
       </div>
-    </div>
+    </a>
+  </div>
+</div>
+
   </main>
 
   <footer>

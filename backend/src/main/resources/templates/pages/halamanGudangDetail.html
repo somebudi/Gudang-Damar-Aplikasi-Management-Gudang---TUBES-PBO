@@ -110,21 +110,24 @@
 
   <!-- Tombol Delete -->
   <div class="btn-wrapper">
-    <button type="button" class="btn-tambah delete-btn">Delete Jenis Barang</button>
+    <button type="button" class="btn-tambah delete-btn" onclick="window.location.href='/barang/delete'"></button>Delete Jenis Barang</button>
   </div>
+
 
   <main>
     <center>
       <div class="card">
-        <a th:href="@{/editHarga/{id}(id=${barang.idBarang})}" class="edit-button">Edit</a>
+  <a th:href="@{/editHarga/{id}(id=${barang.idBarang})}" class="edit-button">Edit</a>
 
-        <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
-        <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
-        <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
-        <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
-        <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
-        <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
-      </div>
+  <p><span>Nama:</span> <span th:text="${barang.nama}">Nama Barang</span></p>
+  <p><span>Ukuran:</span> <span th:text="${barang.kategori.ukuran}">Ukuran</span></p>
+  <p><span>Ketebalan:</span> <span th:text="${barang.kategori.ketebalan}">Ketebalan</span></p>
+  <p><span>Bahan:</span> <span th:text="${barang.kategori.bahan}">Bahan</span></p>
+  <p><span>Harga:</span> Rp <span th:text="${barang.harga.harga}">0</span></p>
+  <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
+  <p><span>Total:</span> Rp <span th:text="${barang.harga.total}">0</span></p>
+</div>
+
     </center>
   </main>
 

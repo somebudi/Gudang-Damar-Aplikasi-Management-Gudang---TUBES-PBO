@@ -20,19 +20,13 @@ public class Barang {
     @Embedded
     private Kategori kategori;
 
-
-    @ManyToOne
-    @JoinColumn(name = "pesanan_id", referencedColumnName = "id")
-    private Pemesanan pemesanan;
-
     public Barang() {}
 
-    public Barang(int idBarang, String nama, Harga harga, Kategori kategori,Pemesanan pemesanan) {
+    public Barang(int idBarang, String nama, Harga harga, Kategori kategori) {
         this.idBarang = idBarang;
         this.nama = nama;
         this.harga = harga;
         this.kategori = kategori;
-        this.pemesanan = pemesanan;
     }
 
     public int getIdBarang() {
@@ -65,13 +59,5 @@ public class Barang {
 
     public void setKategori(Kategori kategori) {
         this.kategori = kategori;
-    }
-
-    public Pemesanan getPemesanan() {
-        return pemesanan;
-    }
-
-    public void setPemesanan(Pemesanan pemesanan) {
-        this.pemesanan = pemesanan;
     }
 }
