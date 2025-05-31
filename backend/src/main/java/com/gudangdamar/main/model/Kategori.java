@@ -5,19 +5,19 @@ import jakarta.persistence.*;
 @Embeddable
 public class Kategori {
 
-    @Column(name = "Ukuran")
+    @Column(name = "ukuran")
     private int ukuran;
 
-    @Column(name = "Bentuk")
+    @Column(name = "bentuk")
     private String bentuk;
 
-    @Column(name = "Ketebalan")
+    @Column(name = "ketebalan")
     private String ketebalan;
 
-    @Column(name = "Bahan")
+    @Column(name = "bahan")
     private String bahan;
 
-    @Column(name = "Guna_Merek")
+    @Column(name = "guna_merek")
     private String merek;
 
     public Kategori() {}
@@ -30,7 +30,6 @@ public class Kategori {
         this.merek = merek;
     }
 
-    // Getter & Setter
     public int getUkuran() {
         return ukuran;
     }

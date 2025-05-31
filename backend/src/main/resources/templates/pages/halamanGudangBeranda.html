@@ -1,123 +1,211 @@
 <!DOCTYPE html>
 <html lang="id" xmlns:th="http://www.thymeleaf.org">
 <head>
-  <style>
-        body {
-            margin: 0;
-            font-family: Arial, sans-serif;
-            background: #f5f5f5;
-        }
-
-        main {
-            padding: 20px;
-        }
-
-        h1 {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-
-        /* Kontainer scroll horizontal bersama 3 baris */
-        .scroll-wrapper {
-            overflow-x: auto;
-            overflow-y: hidden; /* sembunyikan scroll vertikal */
-            padding-bottom: 10px;
-            max-height: 820px; /* cukup untuk 3 baris */
-        }
-
-        .scroll-container {
-            display: flex;
-            flex-wrap: nowrap; /* jangan wrap */
-            height: 800px; /* tinggi untuk muat 3 baris */
-            align-items: flex-start;
-        }
-
-        .item {
-            width: 250px;
-            height: 250px; /* tinggi item */
-            margin: 10px 10px 10px 0; /* jarak antar item horizontal */
-            box-sizing: border-box;
-        }
-
-        .card-content {
-            background-image: url('/gambar/dapur.jpg');
-            background-size: cover;
-            background-position: center;
-            border-radius: 10px;
-            padding: 15px;
-            color: white;
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-            position: relative;
-            overflow: hidden;
-            transition: transform 0.3s ease;
-            height: 100%; /* isi penuh tinggi item */
-        }
-
-        .card-content::before {
-            content: "";
-            position: absolute;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.4);
-            z-index: 0;
-        }
-
-        .card-content p,
-        .card-content span,
-        .card-content strong {
-            position: relative;
-            z-index: 1;
-        }
-
-        .card-content:hover {
-            transform: translateY(-5px);
-        }
-
-        .item a {
-            text-decoration: none;
-            color: inherit;
-        }
-
-        .scroll-wrapper::-webkit-scrollbar {
-            height: 8px;
-        }
-
-        .scroll-wrapper::-webkit-scrollbar-thumb {
-            background-color: #aaa;
-            border-radius: 4px;
-        }
-    </style>
-
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" th:href="@{/styles/beranda.css}" />
+  <title>Daftar Barang</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+    }
+
+    header {
+      z-index: 10;
+    }
+
+    main {
+      flex: 1;
+      overflow-y: auto;
+      padding: 20px 0;
+    }
+
+    .grid-container {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(180px, 1fr));
+      gap: 15px;
+      padding: 20px;
+      max-width: 1200px;
+      margin: auto;
+    }
+
+    .card {
+      position: relative;
+      height: 200px;
+      background-image: url('/gambar/dapur.jpg');
+      background-size: cover;
+      background-position: center;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+      cursor: pointer;
+      transition: transform 0.3s ease;
+    }
+
+    .card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      background-color: rgba(0,0,0,0.5);
+      opacity: 0;
+      transition: 0.3s ease;
+      z-index: 1;
+    }
+
+    .card:hover::before {
+      opacity: 1;
+    }
+
+    .card-content {
+      position: absolute;
+      inset: 0;
+      z-index: 2;
+      color: white;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      opacity: 0;
+      padding: 10px;
+      text-align: center;
+      transition: 0.3s ease;
+    }
+
+    .card:hover .card-content {
+      opacity: 1;
+    }
+
+    .card-content p {
+      margin: 4px 0;
+      font-size: 13px;
+    }
+
+    .card-content strong {
+      font-size: 15px;
+      margin-bottom: 5px;
+    }
+
+    footer {
+      background-color: #222;
+      color: white;
+      padding: 12px;
+      text-align: center;
+      font-size: 14px;
+    }
+
+    /* Tombol Tambah dan Delete */
+    .btn-wrapper {
+      display: flex;
+      justify-content: flex-start;
+      gap: 12px;
+      padding: 20px 24px 0;
+    }
+
+    .btn-tambah {
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      border: none;
+      color: white;
+      padding: 12px 24px;
+      font-size: 16px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      box-shadow: 0 6px 15px rgba(37, 117, 252, 0.4);
+      transition: background 0.3s ease, transform 0.2s ease;
+      user-select: none;
+      position: relative;
+      overflow: hidden;
+      white-space: nowrap;
+    }
+
+    .btn-tambah:hover {
+      background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(37, 117, 252, 0.6);
+    }
+
+    .btn-tambah:active {
+      transform: scale(0.98);
+      box-shadow: 0 4px 12px rgba(37, 117, 252, 0.8);
+    }
+
+    .btn-tambah::after {
+      content: '';
+      position: absolute;
+      left: -50%;
+      top: 0;
+      width: 200%;
+      height: 100%;
+      background: rgba(255, 255, 255, 0.2);
+      transform: skewX(-20deg);
+      transition: left 0.5s ease;
+      pointer-events: none;
+    }
+
+    .btn-tambah:hover::after {
+      left: 100%;
+    }
+
+    
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .card {
+        height: 160px;
+      }
+
+      .card-content p {
+        font-size: 11px;
+      }
+
+      .card-content strong {
+        font-size: 13px;
+      }
+
+      .btn-wrapper {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+    }
+  </style>
 </head>
-
 <body>
-  <div th:replace="components/navbar :: navbar"></div>
 
-  <button id="addItemButton">Tambah Jenis Barang</button>
+  <header th:replace="components/navbar :: navbar"></header>
+
+  <div class="btn-wrapper">
+  <button type="button" class="btn-tambah" onclick="window.location.href='/barang/tambah'">Tambah Jenis Barang</button>
+</div>
+
 
   <main>
-    <h1>Daftar</h1>
-
-    <div class="scroll-wrapper">
-      <div class="scroll-container">
-        <div class="item" th:each="barang : ${barangList}">
-          <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
-            <div class="card-content">
-              <p><strong>Nama:</strong> <span th:text="${barang.nama}"></span></p>
-              <p><strong>Ukuran:</strong> <span th:text="${barang.kategori.ukuran}"></span></p>
-              <p><strong>Harga:</strong> <span th:text="${barang.harga}"></span></p>
-            </div>
-          </a>
-        </div>
+    <div class="grid-container">
+  <div class="card" th:each="barang : ${barangList}">
+    <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
+      <div class="card-content">
+        <strong th:text="'Nama: ' + ${barang.nama}"></strong>
+        <p th:text="'Ukuran: ' + ${barang.kategori.ukuran}"></p>
+        <p th:text="'Harga: Rp ' + ${barang.harga.harga}"></p>
+        <p th:text="'Jumlah: ' + ${barang.harga.jumlah}"></p>
+        <p th:text="'Total: Rp ' + ${barang.harga.total}"></p>
       </div>
-    </div>
+    </a>
+  </div>
+</div>
+
   </main>
 
-  <div class="page-transition" id="transitionOverlay"></div>
+  <footer>
+    &copy; 2025 DapurKita. All rights reserved.
+  </footer>
+
 </body>
 </html>
