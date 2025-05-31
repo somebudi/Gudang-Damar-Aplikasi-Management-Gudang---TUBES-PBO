@@ -13,6 +13,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import com.gudangdamar.main.model.Pemesanan;
 import com.gudangdamar.main.repository.PemesananRepository;
 import java.util.List;
+import java.util.List;
+import java.util.Map;
+import java.util.HashMap;
+import java.util.ArrayList;
 
 @Controller
 public class PageController {
@@ -31,22 +35,83 @@ public class PageController {
     }
 
     @GetMapping("/halamanGudangBeranda")
-    public String showGudangBeranda(Model model) {
-    List<Barang> barangList = barangRepository.findAll(); 
-    model.addAttribute("barangList", barangList);
-        return "pages/halamanGudangBeranda";
+public String showGudangBeranda(Model model) {
+    List<Barang> barangList = barangRepository.findAll();
+
+    Map<String, Barang> map = new HashMap<>();
+
+    for (Barang b : barangList) {
+        String key = b.getNama() + "|" +
+                     b.getKategori().getUkuran() + "|" +
+                     b.getKategori().getKetebalan() + "|" +
+                     b.getKategori().getBentuk() + "|" +
+                     b.getKategori().getBahan() + "|" +
+                     b.getKategori().getMerek();
+
+        if (map.containsKey(key)) {
+            Barang existing = map.get(key);
+
+            int jumlahLama = existing.getHarga().getJumlah();
+            int jumlahBaru = b.getHarga().getJumlah();
+
+            existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
+            existing.getHarga().hitungTotalHarga();
+        } else {
+            b.getHarga().hitungTotalHarga();
+            map.put(key, b);
+        }
+    }
+
+    List<Barang> barangListGrouped = new ArrayList<>(map.values());
+
+    model.addAttribute("barangList", barangListGrouped);
+
+    return "pages/halamanGudangBeranda";
 }
 
-    @GetMapping("/halamanGudangDetail/{id}")
-    public String detailBarang(@PathVariable("id") int id, Model model) {
-    Barang barang = barangRepository.findById(id).orElse(null);
-    if (barang == null) {
+   @GetMapping("/halamanGudangDetail/{id}")
+public String detailBarang(@PathVariable("id") int id, Model model) {
+    Barang barangDetail = barangRepository.findById(id).orElse(null);
+    if (barangDetail == null) {
         return "redirect:/error";
     }
 
-    model.addAttribute("barang", barang);
+    List<Barang> barangList = barangRepository.findAll();
+
+    // Map dengan key gabungan dari nama, ukuran, ketebalan, bentuk, bahan, merek
+    Map<String, Barang> map = new HashMap<>();
+
+    for (Barang b : barangList) {
+        // Buat key unik berdasarkan kombinasi atribut
+        String key = b.getNama() + "|" +
+                     b.getKategori().getUkuran() + "|" +
+                     b.getKategori().getKetebalan() + "|" +
+                     b.getKategori().getBentuk() + "|" +
+                     b.getKategori().getBahan() + "|" +
+                     b.getKategori().getMerek();
+
+        if (map.containsKey(key)) {
+            Barang existing = map.get(key);
+
+            int jumlahLama = existing.getHarga().getJumlah();
+            int jumlahBaru = b.getHarga().getJumlah();
+
+            existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
+            existing.getHarga().hitungTotalHarga();
+        } else {
+            b.getHarga().hitungTotalHarga();
+            map.put(key, b);
+        }
+    }
+
+    List<Barang> barangListGrouped = new ArrayList<>(map.values());
+
+    model.addAttribute("barang", barangDetail);          // detail per id
+    model.addAttribute("barangList", barangListGrouped); // list gabungan berdasarkan kombinasi unik
+
     return "pages/halamanGudangDetail";
 }
+
 
     @GetMapping("/halamanGudangServis")
     public String showGudangServis(Model model) {
@@ -61,5 +126,6 @@ public String showGudangPemesanan(Model model) {
     model.addAttribute("pemesananList", pemesananRepository.findAll());
     return "pages/halamanGudangPesanan";
 }
+
 
 }
