@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" th:href="@{/styles/beranda.css}" />
   <title>Detail Barang</title>
+  <link rel="stylesheet" th:href="@{/styles/beranda.css}" />
   <style>
     body {
       background: linear-gradient(to bottom, #C6C6C6 77%, #FFFFFF 100%);
@@ -75,6 +75,34 @@
     .edit-button:hover {
       background-color: #bcbcbc;
     }
+    .jumlah-wrapper {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
+      margin-top: 15px;
+    }
+    .jumlah-wrapper input[type="number"] {
+      width: 60px;
+      text-align: center;
+      font-size: 16px;
+      padding: 5px;
+      border: 1px solid #ccc;
+      border-radius: 6px;
+    }
+    .jumlah-wrapper button {
+      padding: 6px 10px;
+      border: none;
+      background: none;
+      font-size: 24px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+    .btn-simpan-wrapper {
+      margin-top: 12px;
+      display: flex;
+      justify-content: center;
+    }
     main {
       padding: 10px;
     }
@@ -96,7 +124,7 @@
   <div th:replace="components/navbar :: navbar"></div>
 
   <div class="btn-wrapper">
-    <form th:action="@{/barang/delete/{id}(id=${barang.idBarang})}" method="post" 
+    <form th:action="@{/barang/delete/{id}(id=${barang.idBarang})}" method="post"
           onsubmit="return confirm('Apakah Anda yakin ingin menghapus barang ini?');">
       <button type="submit" class="btn-tambah delete-btn">Delete Jenis Barang</button>
     </form>
@@ -113,11 +141,31 @@
         <p><span>Harga:</span> Rp <span th:text="${#numbers.formatDecimal(barang.harga.harga, 0, 'COMMA', 2, 'POINT')}">0</span></p>
         <p><span>Jumlah:</span> <span th:text="${barang.harga.jumlah}">0</span></p>
         <p><span>Total:</span> Rp <span th:text="${#numbers.formatDecimal(barang.harga.total, 0, 'COMMA', 2, 'POINT')}">0</span></p>
+
+        <form th:action="@{/barang/updateJumlah/{id}(id=${barang.idBarang})}" method="post">
+          <label for="jumlah">Ubah Jumlah:</label>
+          <div class="jumlah-wrapper">
+            <button type="button" onclick="ubahJumlah(-1)">&#x2796;</button> <!-- Minus icon -->
+            <input type="number" id="jumlah" name="jumlah" th:value="${barang.harga.jumlah}" min="0" required />
+            <button type="button" onclick="ubahJumlah(1)">&#x2795;</button> <!-- Plus icon -->
+          </div>
+          <div class="btn-simpan-wrapper">
+            <button type="submit" class="btn-tambah">Simpan Jumlah</button>
+          </div>
+        </form>
       </div>
     </center>
   </main>
 
+  <script>
+    function ubahJumlah(delta) {
+      const input = document.getElementById('jumlah');
+      let val = parseInt(input.value || 0);
+      val += delta;
+      if (val < 0) val = 0;
+      input.value = val;
+    }
+  </script>
   <script th:src="@{/scripts/beranda.js}" type="module"></script>
-
 </body>
 </html>
