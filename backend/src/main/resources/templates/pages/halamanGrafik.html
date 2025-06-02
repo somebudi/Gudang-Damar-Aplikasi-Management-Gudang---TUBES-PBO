@@ -69,8 +69,10 @@
 
     .right-sidebar {
       flex: 1;
-      border-left: 1px solid #ccc;
-      padding-left: 20px;
+      background-color: #66ACE6;
+      color: azure;
+      border-left: 1px solid blue;
+      padding: 20px 20px 20px 20px;
     }
 
     .riwayat-title {
@@ -81,9 +83,26 @@
     .riwayat-box {
       height: 400px;
       overflow-y: auto;
-      border: 1px solid #ccc;
+      border: 1px solid blue;
+      background-color: aliceblue;
       border-radius: 6px;
       padding: 10px;
+    }
+
+    .box{
+      background-color:#66ACE6;
+      color: azure;
+      margin-bottom: 10px;
+      padding: 10px;
+      border-radius: 4px;;
+    }
+
+    .filter-box{
+      margin: 10px 0px 10px 0px;
+      border-radius: 10px;
+      border: solid 1px azure;
+      background-color: #66ACE6;
+      color: azure;
     }
   </style>
 </head>
@@ -109,10 +128,12 @@
       
     </div>
 
+    
 <div class="right-sidebar">
+<center>
  <form method="get" action="/riwayat" id="filterForm">
-  <label for="filter">Filter Riwayat:</label>
-  <select id="filter" name="filter" onchange="document.getElementById('filterForm').submit()">
+  <label class="riwayat-title" for="filter">Filter Riwayat: </label>
+  <select class="filter-box" id="filter" name="filter" onchange="document.getElementById('filterForm').submit()">
     <option value="all" th:selected="${filter == 'all'}">All</option>
     <option value="barang" th:selected="${filter == 'barang'}">Barang</option>
     <option value="servis" th:selected="${filter == 'servis'}">Servis</option>
@@ -120,8 +141,7 @@
   </select>
 </form>
 <div class="riwayat-box">
-  <div th:each="item : ${riwayatList}" 
-       style="height: auto; background-color: #ddd; margin-bottom: 10px; padding: 10px; border-radius: 4px;">
+  <div class="box" th:each="item : ${riwayatList}" >
     <p th:text="${item.deskripsi}">Deskripsi riwayat</p>
     <small>
       <span th:if="${item.waktuMulai != null}" 
@@ -131,6 +151,7 @@
     </small>
   </div>
 </div>
+</center>
 
 
 
