@@ -55,7 +55,7 @@ public class PageController {
         }
 
         List<Barang> barangList = barangRepository.findAll();
-
+        
         Map<String, Barang> map = new HashMap<>();
 
         for (Barang b : barangList) {
