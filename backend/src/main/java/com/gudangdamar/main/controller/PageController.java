@@ -1,19 +1,26 @@
 package com.gudangdamar.main.controller;
 
-import com.gudangdamar.main.model.User;
-import com.gudangdamar.main.model.Servis;
-import com.gudangdamar.main.model.Barang;
-import com.gudangdamar.main.model.Pemesanan;
-import com.gudangdamar.main.repository.BarangRepository;
-import com.gudangdamar.main.repository.ServisRepository;
-import com.gudangdamar.main.repository.PemesananRepository;
-import jakarta.servlet.http.HttpSession;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 
-import java.util.*;
+import com.gudangdamar.main.model.Barang;
+import com.gudangdamar.main.model.Pemesanan;
+import com.gudangdamar.main.model.Servis;
+import com.gudangdamar.main.model.User;
+import com.gudangdamar.main.repository.BarangRepository;
+import com.gudangdamar.main.repository.PemesananRepository;
+import com.gudangdamar.main.repository.ServisRepository;
+
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class PageController {
@@ -157,5 +164,9 @@ public class PageController {
         model.addAttribute("user", user);
 
         return "pages/halamanGudangPesanan";
+    }
+    @PostMapping("/search/close")
+    public String closeSearch() {
+        return "redirect:/halamanGudangBeranda";
     }
 }
