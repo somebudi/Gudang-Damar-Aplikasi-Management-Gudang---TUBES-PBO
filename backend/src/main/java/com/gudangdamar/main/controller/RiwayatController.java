@@ -1,5 +1,5 @@
 package com.gudangdamar.main.controller;
-
+import com.gudangdamar.main.model.User;
 import com.gudangdamar.main.controller.RiwayatController.RiwayatItem;
 import com.gudangdamar.main.model.Barang;
 import com.gudangdamar.main.model.Kategori;
@@ -12,6 +12,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import jakarta.servlet.http.HttpSession;
 
 import java.time.LocalDateTime;
 import java.util.*;
@@ -31,8 +32,14 @@ public class RiwayatController {
         this.pemesananRepository = pemesananRepository;
     }
 
-    @GetMapping("/riwayat")
-public String riwayat(@RequestParam(defaultValue = "all") String filter, Model model) {
+   @GetMapping("/riwayat")
+public String riwayat(@RequestParam(defaultValue = "all") String filter, Model model, HttpSession session) {
+    User user = (User) session.getAttribute("loggedInUser");
+    if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
+        return "redirect:/login"; // atau halaman 403
+    
+    }
+
     List<RiwayatItem> riwayatList = new ArrayList<>();
 
    if (filter.equals("all") || filter.equals("barang")) {

@@ -1,5 +1,5 @@
 package com.gudangdamar.main.controller;
-
+import com.gudangdamar.main.model.User;
 import com.gudangdamar.main.controller.RiwayatController.RiwayatItem;
 import com.gudangdamar.main.model.Barang;
 import com.gudangdamar.main.repository.BarangRepository;
@@ -11,6 +11,7 @@ import java.util.Optional;
 
 import java.util.ArrayList;
 import java.util.List;
+import jakarta.servlet.http.HttpSession;
 
 @Controller
 public class GrafikController {
@@ -19,7 +20,12 @@ public class GrafikController {
     private BarangRepository barangRepository;
 
 @GetMapping("/halamanGrafik")
-public String halamanGrafik(Model model) {
+public String halamanGrafik(HttpSession session, Model model) {
+    User user = (User) session.getAttribute("loggedInUser");
+    if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
+        return "redirect:/login";  
+    }
+
     List<Barang> barangList = barangRepository.findAll();
     List<RiwayatItem> riwayatList = new ArrayList<>();
 
@@ -46,6 +52,4 @@ public String halamanGrafik(Model model) {
 
     return "pages/halamanGrafik";
 }
-
-
 }

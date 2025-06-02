@@ -8,66 +8,49 @@ public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private int id;
 
     @Column(nullable = false, unique = true)
     private String username;
 
     @Column(nullable = false)
-    private String password;
+    private String passwordHash;
+
+    @Column(nullable = false)
+    private String salt;
 
     @Column(nullable = false)
     private String role;
 
+    @Transient
+    private String password; // untuk input dari form, tidak disimpan ke DB
 
-    public User(String username, String password, String role) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
+    public User() {
+        // constructor kosong, jangan generate salt di sini
     }
 
-   
-    public User() {}
+    // Getter dan Setter
 
+    public int getId() { return id; }
+    public void setId(int id) { this.id = id; }
 
-    public Long getId() {
-        return id;
-    }
+    public String getUsername() { return username; }
+    public void setUsername(String username) { this.username = username; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public String getPasswordHash() { return passwordHash; }
+    public void setPasswordHash(String passwordHash) { this.passwordHash = passwordHash; }
 
-    public String getUsername() {
-        return username;
-    }
+    public String getSalt() { return salt; }
+    public void setSalt(String salt) { this.salt = salt; }
 
-    public void setUsername(String username) {
-        if (username == null || username.isEmpty()) {
-            System.out.println("Username tidak boleh kosong");
-        } else {
-            this.username = username;
-        }
-    }
+    public String getRole() { return role; }
+    public void setRole(String role) { this.role = role; }
 
-    public String getPassword() {
-        return password;
-    }
+    public String getPassword() { return password; }
+    public void setPassword(String password) { this.password = password; }
 
-    public void setPassword(String password) {
-        this.password = password;
-    }
-
-    public String getRole() {
-        return role;
-    }
-
-    public void setRole(String role) {
-        this.role = role;
-    }
-
-  
-    public boolean login(String username, String password) {
-        return this.username.equals(username) && this.password.equals(password);
+    // Validasi password dengan salt dan hash yang sudah tersimpan
+    public boolean checkPassword(String rawPassword) {
+        return com.gudangdamar.main.util.PasswordUtils.verifyPassword(rawPassword, this.salt, this.passwordHash);
     }
 }

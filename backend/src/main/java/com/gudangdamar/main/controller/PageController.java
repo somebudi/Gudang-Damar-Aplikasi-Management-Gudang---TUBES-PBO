@@ -1,22 +1,19 @@
 package com.gudangdamar.main.controller;
 
-import com.gudangdamar.main.repository.BarangRepository;
+import com.gudangdamar.main.model.User;
 import com.gudangdamar.main.model.Servis;
 import com.gudangdamar.main.model.Barang;
-import com.gudangdamar.main.model.Kategori;
+import com.gudangdamar.main.model.Pemesanan;
+import com.gudangdamar.main.repository.BarangRepository;
 import com.gudangdamar.main.repository.ServisRepository;
-import org.springframework.web.bind.annotation.PathVariable;
+import com.gudangdamar.main.repository.PemesananRepository;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.GetMapping;
-import com.gudangdamar.main.model.Pemesanan;
-import com.gudangdamar.main.repository.PemesananRepository;
-import java.util.List;
-import java.util.List;
-import java.util.Map;
-import java.util.HashMap;
-import java.util.ArrayList;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.*;
 
 @Controller
 public class PageController {
@@ -29,103 +26,136 @@ public class PageController {
 
     @Autowired
     private PemesananRepository pemesananRepository;
+
     @GetMapping("/")
-    public String showLoginPage() {
+    public String redirectRoot(Model model) {
+        model.addAttribute("user", new User());
         return "pages/login"; 
     }
 
+    private boolean isKasirOrAdmin(User user) {
+        if (user == null) return false;
+        String role = user.getRole();
+        return "kasir".equalsIgnoreCase(role) || "admin".equalsIgnoreCase(role);
+    }
+
+    // --- HALAMAN GUDANG BERANDA ---
     @GetMapping("/halamanGudangBeranda")
-public String showGudangBeranda(Model model) {
-    List<Barang> barangList = barangRepository.findAll();
-
-    Map<String, Barang> map = new HashMap<>();
-
-    for (Barang b : barangList) {
-        String key = b.getNama() + "|" +
-                     b.getKategori().getUkuran() + "|" +
-                     b.getKategori().getKetebalan() + "|" +
-                     b.getKategori().getBentuk() + "|" +
-                     b.getKategori().getBahan() + "|" +
-                     b.getKategori().getMerek();
-
-        if (map.containsKey(key)) {
-            Barang existing = map.get(key);
-
-            int jumlahLama = existing.getHarga().getJumlah();
-            int jumlahBaru = b.getHarga().getJumlah();
-
-            existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
-            existing.getHarga().hitungTotalHarga();
-        } else {
-            b.getHarga().hitungTotalHarga();
-            map.put(key, b);
+    public String showGudangBeranda(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (!isKasirOrAdmin(user)) {
+            return "redirect:/login";  // atau halaman error 403 kalau mau lebih jelas
         }
-    }
 
-    List<Barang> barangListGrouped = new ArrayList<>(map.values());
+        List<Barang> barangList = barangRepository.findAll();
 
-    model.addAttribute("barangList", barangListGrouped);
+        Map<String, Barang> map = new HashMap<>();
 
-    return "pages/halamanGudangBeranda";
-}
+        for (Barang b : barangList) {
+            String key = b.getNama() + "|" +
+                         b.getKategori().getUkuran() + "|" +
+                         b.getKategori().getKetebalan() + "|" +
+                         b.getKategori().getBentuk() + "|" +
+                         b.getKategori().getBahan() + "|" +
+                         b.getKategori().getMerek();
 
-   @GetMapping("/halamanGudangDetail/{id}")
-public String detailBarang(@PathVariable("id") int id, Model model) {
-    Barang barangDetail = barangRepository.findById(id).orElse(null);
-    if (barangDetail == null) {
-        return "redirect:/error";
-    }
+            if (map.containsKey(key)) {
+                Barang existing = map.get(key);
 
-    List<Barang> barangList = barangRepository.findAll();
+                int jumlahLama = existing.getHarga().getJumlah();
+                int jumlahBaru = b.getHarga().getJumlah();
 
-    // Map dengan key gabungan dari nama, ukuran, ketebalan, bentuk, bahan, merek
-    Map<String, Barang> map = new HashMap<>();
-
-    for (Barang b : barangList) {
-        // Buat key unik berdasarkan kombinasi atribut
-        String key = b.getNama() + "|" +
-                     b.getKategori().getUkuran() + "|" +
-                     b.getKategori().getKetebalan() + "|" +
-                     b.getKategori().getBentuk() + "|" +
-                     b.getKategori().getBahan() + "|" +
-                     b.getKategori().getMerek();
-
-        if (map.containsKey(key)) {
-            Barang existing = map.get(key);
-
-            int jumlahLama = existing.getHarga().getJumlah();
-            int jumlahBaru = b.getHarga().getJumlah();
-
-            existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
-            existing.getHarga().hitungTotalHarga();
-        } else {
-            b.getHarga().hitungTotalHarga();
-            map.put(key, b);
+                existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
+                existing.getHarga().hitungTotalHarga();
+            } else {
+                b.getHarga().hitungTotalHarga();
+                map.put(key, b);
+            }
         }
+
+        List<Barang> barangListGrouped = new ArrayList<>(map.values());
+
+        model.addAttribute("barangList", barangListGrouped);
+        model.addAttribute("user", user);
+
+        return "pages/halamanGudangBeranda";
     }
 
-    List<Barang> barangListGrouped = new ArrayList<>(map.values());
+    // --- HALAMAN DETAIL BARANG ---
+    @GetMapping("/halamanGudangDetail/{id}")
+    public String detailBarang(@PathVariable("id") int id, HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (!isKasirOrAdmin(user)) {
+            return "redirect:/login";
+        }
 
-    model.addAttribute("barang", barangDetail);          // detail per id
-    model.addAttribute("barangList", barangListGrouped); // list gabungan berdasarkan kombinasi unik
+        Barang barangDetail = barangRepository.findById(id).orElse(null);
+        if (barangDetail == null) {
+            return "redirect:/error";
+        }
 
-    return "pages/halamanGudangDetail";
-}
+        List<Barang> barangList = barangRepository.findAll();
 
+        Map<String, Barang> map = new HashMap<>();
 
+        for (Barang b : barangList) {
+            String key = b.getNama() + "|" +
+                         b.getKategori().getUkuran() + "|" +
+                         b.getKategori().getKetebalan() + "|" +
+                         b.getKategori().getBentuk() + "|" +
+                         b.getKategori().getBahan() + "|" +
+                         b.getKategori().getMerek();
+
+            if (map.containsKey(key)) {
+                Barang existing = map.get(key);
+
+                int jumlahLama = existing.getHarga().getJumlah();
+                int jumlahBaru = b.getHarga().getJumlah();
+
+                existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
+                existing.getHarga().hitungTotalHarga();
+            } else {
+                b.getHarga().hitungTotalHarga();
+                map.put(key, b);
+            }
+        }
+
+        List<Barang> barangListGrouped = new ArrayList<>(map.values());
+
+        model.addAttribute("barang", barangDetail);
+        model.addAttribute("barangList", barangListGrouped);
+        model.addAttribute("user", user);
+
+        return "pages/halamanGudangDetail";
+    }
+
+    
     @GetMapping("/halamanGudangServis")
-    public String showGudangServis(Model model) {
+    public String showGudangServis(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (!isKasirOrAdmin(user)) {
+            return "redirect:/login";
+        }
+
         model.addAttribute("servisBaru", new Servis());
         model.addAttribute("servisList", servisRepository.findAll());
+        model.addAttribute("user", user);
+
         return "pages/halamanGudangServis";
-}
-
-@GetMapping("/halamanGudangPesanan")
-public String showGudangPemesanan(Model model) {
-    model.addAttribute("pemesananBaru", new Pemesanan());
-    model.addAttribute("pemesananList", pemesananRepository.findAll());
-    return "pages/halamanGudangPesanan";
-}
+    }
 
 
+    @GetMapping("/halamanGudangPesanan")
+    public String showGudangPemesanan(HttpSession session, Model model) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (!isKasirOrAdmin(user)) {
+            return "redirect:/login";
+        }
+
+        model.addAttribute("pemesananBaru", new Pemesanan());
+        model.addAttribute("pemesananList", pemesananRepository.findAll());
+        model.addAttribute("user", user);
+
+        return "pages/halamanGudangPesanan";
+    }
 }
