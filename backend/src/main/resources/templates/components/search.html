@@ -1,29 +1,47 @@
+<!-- file: search.html -->
 <div xmlns:th="http://www.thymeleaf.org" th:fragment="search">
   <style>
-    body {
-      font-family: Arial, sans-serif;
-    }
-
-    .search-button {
+    /* Search header kecil di atas tengah */
+    .search-header {
       position: fixed;
-      top: 20px;
-      right: 20px;
-      width: 40px;
-      height: 40px;
-      border: none;
-      background: rgb(0, 28, 119);
-      color: white;
-      border-radius: 50%;
-      font-size: 20px;
-      cursor: pointer;
+      top: 5px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 10px;
+      background-color: white;
+      padding: 10px 20px;
+      border-radius: 30px;
+      box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
       z-index: 100;
-      transition: background-color 0.2s;
+      align-items: center;
     }
 
-    .search-button:hover {
-      background-color: #444;
+    .search-input {
+      padding: 8px 16px;
+      border-radius: 20px;
+      border: 1px solid #ccc;
+      width: 200px;
     }
 
+    .search-btn,
+    .filter-btn {
+      padding: 8px 16px;
+      border: none;
+      border-radius: 20px;
+      background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+      color: white;
+      cursor: pointer;
+    }
+
+    .search-btn:hover,
+    .filter-btn:hover {
+      background: linear-gradient(135deg, #2575fc 0%, #6a11cb 100%);
+      transform: scale(1.05);
+      box-shadow: 0 8px 20px rgba(37, 117, 252, 0.6);
+    }
+
+    /* Overlay Filter */
     .overlay {
       display: none;
       position: fixed;
@@ -63,14 +81,6 @@
       }
     }
 
-    .search-input {
-      width: 100%;
-      padding: 10px;
-      border-radius: 20px;
-      border: 1px solid #ccc;
-      margin-bottom: 20px;
-    }
-
     .button-grid {
       display: flex;
       gap: 20px;
@@ -84,81 +94,84 @@
     }
 
     .filter-button,
-    .submit {
+    .close-btn {
       padding: 8px 16px;
-      background-color: #dcdcdc;
-      border: none;
       border-radius: 20px;
+      border: none;
       cursor: pointer;
-      transition: background-color 0.2s;
+    }
+
+    .filter-button {
+      background-color: #dcdcdc;
     }
 
     .filter-button:hover {
       background-color: #bcbcbc;
     }
 
-    .submit {
-      background-color: #66ACE6;
+    .close-btn {
+      margin-top: 20px;
+      background-color: #e74c3c;
       color: white;
     }
 
-    .close-button {
-      margin-top: 20px;
-      background-color: #e06666;
-      color: white;
+    .close-btn:hover {
+      background-color: #c0392b;
     }
   </style>
 
-  <!-- Tombol Search -->
-  <button class="search-button" id="openSearch" title="Cari">&#128269;</button>
-
-  <!-- Overlay dan Popup -->
-  <div class="overlay" id="searchOverlay">
-    <div class="popup-panel">
-      <form th:action="@{/search/result}" method="get">
-        <input type="text" class="search-input" name="query" placeholder="Masukkan nama barang" th:value="${param.query}" />
-
-        <div class="button-grid">
-          <div class="filter-column">
-            <button class="filter-button" type="submit" name="sort" value="az">Huruf A-Z</button>
-            <button class="filter-button" type="submit" name="sort" value="za">Huruf Z-A</button>
-            <button class="filter-button" type="submit" name="sort" value="expensive">Harga Mahal</button>
-            <button class="filter-button" type="submit" name="sort" value="cheap">Harga Murah</button>
-            <button class="filter-button" type="submit" name="filter" value="bentuk">Bentuk</button>
-          </div>
-          <div class="filter-column">
-            <button class="filter-button" type="submit" name="filter" value="ukuran">Ukuran</button>
-            <button class="filter-button" type="submit" name="filter" value="ketebalan">Ketebalan</button>
-            <button class="filter-button" type="submit" name="filter" value="material">Material</button>
-            <button class="filter-button" type="submit" name="filter" value="brand">Brand</button>
-          </div>
-        </div>
-
-        <button type="submit" class="submit">Cari</button>
-      </form>
-
-      <button type="button" class="filter-button close-button" id="closeOverlayBtn">Tutup</button>
-    </div>
+  <!-- Search Header -->
+  <div class="search-header">
+    <form th:action="@{/search/result}" method="get" style="display:flex;gap:10px;">
+      <input class="search-input" type="text" name="query" placeholder="Cari barang..." />
+      <button class="search-btn" type="submit">Cari</button>
+    </form>
+    <button class="filter-btn" id="filterToggleBtn">Filter</button>
   </div>
 
+ <!-- Popup Filter -->
+<div class="overlay" id="filterOverlay">
+  <div class="popup-panel">
+    <form th:action="@{/search/result}" method="get">
+      <div class="button-grid">
+        <div class="filter-column">
+          <button class="filter-button" type="submit" name="sort" value="az">Huruf A-Z</button>
+          <button class="filter-button" type="submit" name="sort" value="za">Huruf Z-A</button>
+          <button class="filter-button" type="submit" name="sort" value="expensive">Harga Mahal</button>
+          <button class="filter-button" type="submit" name="sort" value="cheap">Harga Murah</button>
+        </div>
+        <div class="filter-column">
+  <button class="filter-button" type="submit" name="filter" value="bentuk" th:if="${hasBentuk}">Bentuk</button>
+  <button class="filter-button" type="submit" name="filter" value="ukuran" th:if="${hasUkuran}">Ukuran</button>
+  <button class="filter-button" type="submit" name="filter" value="ketebalan" th:if="${hasKetebalan}">Ketebalan</button>
+  <button class="filter-button" type="submit" name="filter" value="material" th:if="${hasBahan}">Material</button>
+  <button class="filter-button" type="submit" name="filter" value="brand" th:if="${hasMerek}">Brand</button>
+</div>
+    </form>
+    <button class="close-btn" id="closeFilterBtn">Tutup</button>
+  </div>
+</div>
+
+
+  <!-- Script -->
   <script>
     document.addEventListener('DOMContentLoaded', function () {
-      const searchButton = document.getElementById('openSearch');
-      const overlay = document.getElementById('searchOverlay');
-      const closeBtn = document.getElementById('closeOverlayBtn');
+      const filterBtn = document.getElementById('filterToggleBtn');
+      const filterOverlay = document.getElementById('filterOverlay');
+      const closeFilterBtn = document.getElementById('closeFilterBtn');
 
-      searchButton.addEventListener('click', function () {
-        overlay.classList.add('active');
+      filterBtn?.addEventListener('click', () => {
+        filterOverlay?.classList.add('active');
       });
 
-      overlay.addEventListener('click', function (e) {
-        if (e.target === overlay) {
-          overlay.classList.remove('active');
+      closeFilterBtn?.addEventListener('click', () => {
+        filterOverlay?.classList.remove('active');
+      });
+
+      filterOverlay?.addEventListener('click', (e) => {
+        if (e.target === filterOverlay) {
+          filterOverlay.classList.remove('active');
         }
-      });
-
-      closeBtn.addEventListener('click', function () {
-        overlay.classList.remove('active');
       });
     });
   </script>

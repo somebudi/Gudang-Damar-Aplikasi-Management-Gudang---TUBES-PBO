@@ -43,38 +43,32 @@ public class BarangController {
     }
 
     @PostMapping("/barang/save")
-public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redirectAttributes) {
-    if (barang.getNama() == null || barang.getNama().isBlank()) {
-        redirectAttributes.addFlashAttribute("error", "Nama barang tidak boleh kosong");
-        return "redirect:/barang/tambah";
+    public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redirectAttributes) {
+        if (barang.getNama() == null || barang.getNama().isBlank()) {
+            redirectAttributes.addFlashAttribute("error", "Nama barang tidak boleh kosong");
+            return "redirect:/barang/tambah";
+        }
+
+        if (barang.getHarga() == null) barang.setHarga(new Harga());
+        if (barang.getKategori() == null) barang.setKategori(new Kategori());
+
+        if (barang.getHarga().getHarga() <= 0 || barang.getHarga().getJumlah() <= 0) {
+            redirectAttributes.addFlashAttribute("error", "Harga dan jumlah harus lebih dari 0");
+            return "redirect:/barang/tambah";
+        }
+
+        barang.getHarga().hitungTotalHarga();
+
+        if (barang.getWaktuMasuk() == null) barang.setWaktuMasuk(LocalDateTime.now());
+
+        barang.setWaktuPendataan(LocalDateTime.now());
+
+        Barang saved = barangRepository.save(barang);
+        redirectAttributes.addFlashAttribute("success", "Barang berhasil disimpan dengan ID: " + saved.getIdBarang());
+        return "redirect:/halamanGudangDetail/" + saved.getIdBarang();
     }
 
-    if (barang.getHarga() == null) {
-        barang.setHarga(new Harga());
-    }
-
-    if (barang.getKategori() == null) {
-        barang.setKategori(new Kategori());
-    }
-
-    if (barang.getHarga().getHarga() <= 0 || barang.getHarga().getJumlah() <= 0) {
-        redirectAttributes.addFlashAttribute("error", "Harga dan jumlah harus lebih dari 0");
-        return "redirect:/barang/tambah";
-    }
-
-    barang.getHarga().hitungTotalHarga();
-
-    if (barang.getWaktuMasuk() == null) {
-        barang.setWaktuMasuk(LocalDateTime.now());
-    }
-
-    barang.setWaktuPendataan(LocalDateTime.now());
-
-    Barang saved = barangRepository.save(barang);
-    redirectAttributes.addFlashAttribute("success", "Barang berhasil disimpan dengan ID: " + saved.getIdBarang());
-    return "redirect:/halamanGudangDetail/" + saved.getIdBarang();
-}
- @PostMapping("barang/delete/{id}")
+    @PostMapping("barang/delete/{id}")
     public String deleteBarang(@PathVariable int id, RedirectAttributes redirectAttributes) {
         if (barangRepository.existsById(id)) {
             barangRepository.deleteById(id);
@@ -108,16 +102,12 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
 
         barang.setNama(barangForm.getNama());
 
-        if (barang.getKategori() == null) {
-            barang.setKategori(new Kategori());
-        }
+        if (barang.getKategori() == null) barang.setKategori(new Kategori());
         barang.getKategori().setUkuran(barangForm.getKategori().getUkuran());
         barang.getKategori().setKetebalan(barangForm.getKategori().getKetebalan());
         barang.getKategori().setBahan(barangForm.getKategori().getBahan());
 
-        if (barang.getHarga() == null) {
-            barang.setHarga(new Harga());
-        }
+        if (barang.getHarga() == null) barang.setHarga(new Harga());
         barang.getHarga().setHarga(barangForm.getHarga().getHarga());
         barang.getHarga().setJumlah(barangForm.getHarga().getJumlah());
         barang.getHarga().hitungTotalHarga();
@@ -127,6 +117,7 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
         redirectAttributes.addFlashAttribute("success", "Data barang berhasil diperbarui.");
         return "redirect:/halamanGudangDetail/" + barang.getIdBarang();
     }
+
     @PostMapping("/barang/updateJumlah/{id}")
     public String updateJumlah(@PathVariable int id, @RequestParam int jumlah, RedirectAttributes redirectAttributes) {
         Optional<Barang> optionalBarang = barangRepository.findById(id);
@@ -136,9 +127,7 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
         }
 
         Barang barang = optionalBarang.get();
-        if (barang.getHarga() == null) {
-            barang.setHarga(new Harga());
-        }
+        if (barang.getHarga() == null) barang.setHarga(new Harga());
 
         barang.getHarga().setJumlah(jumlah);
         barang.getHarga().hitungTotalHarga();
@@ -148,28 +137,14 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
         redirectAttributes.addFlashAttribute("success", "Jumlah barang berhasil diperbarui.");
         return "redirect:/halamanGudangDetail/" + id;
     }
-    // @GetMapping("/barang/cari")
-    // public String cariBarang(@RequestParam("nama") String nama, Model model) {
-    //     if (nama == null || nama.isBlank()) {
-    //         model.addAttribute("error", "Nama barang tidak boleh kosong");
-    //         return "pages/halamanGudangBeranda";
-    //     }
 
-    //     model.addAttribute("barangList", barangRepository.findByNamaContainingIgnoreCase(nama));
-    //     return "pages/halamanGudangBeranda";
-    // }
-    // @GetMapping("/barang/ukuran")
-    // public String sortBarangbyUkuran(@RequestParam("ukuran") int ukuran, Model model) {
-    //     // You can directly query and add the filtered list to the model
-    //     model.addAttribute("barangList", barangRepository.findByUkuranContainingIgnoreCase(ukuran));
-    //     return "pages/halamanGudangBeranda";
-    // }
     @GetMapping("/search/result")
     public String searchBarang(
             @RequestParam(required = false) String query,
             @RequestParam(required = false) String sort,
             @RequestParam(required = false) String filter,
             Model model, HttpSession session) {
+
         User user = (User) session.getAttribute("loggedInUser");
         if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
             return "redirect:/login";
@@ -177,50 +152,40 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
 
         List<Barang> barangList;
 
-        // Jika ada query pencarian
         if (query != null && !query.trim().isEmpty()) {
             barangList = barangRepository.findByNamaContainingIgnoreCase(query);
         } else {
             barangList = barangRepository.findAll();
         }
 
-        // Filter tambahan berdasarkan kategori atau properti
         if (filter != null) {
             barangList = barangList.stream().filter(b -> {
                 Kategori k = b.getKategori();
                 if (k == null) return false;
-                switch (filter) {
-                    case "ukuran": return k.getUkuran() != 0;
-                    case "bentuk": return k.getBentuk() != null && !k.getBentuk().isEmpty();
-                    case "material": return k.getBahan() != null && !k.getBahan().isEmpty();
-                    case "brand": return b.getMerek() != null && !b.getMerek().isEmpty();
-                    case "ketebalan": return k.getKetebalan() != null;
-                    default: return true;
-                }
+                return switch (filter) {
+                    case "ukuran" -> k.getUkuran() > 0;
+                    case "bentuk" -> k.getBentuk() != null && !k.getBentuk().isEmpty();
+                    case "material" -> k.getBahan() != null && !k.getBahan().isEmpty();
+                    case "brand" -> b.getMerek() != null && !b.getMerek().isEmpty();
+                    case "ketebalan" -> k.getKetebalan() != null && !k.getKetebalan().isEmpty();
+                    default -> true;
+                };
             }).collect(Collectors.toList());
+             model.addAttribute("barangList", barangList);
+             model.addAttribute("showFilter", true);
+            
         }
 
-        // Sorting
         if (sort != null) {
             switch (sort) {
-                case "az":
-                    barangList.sort(Comparator.comparing(Barang::getNama, String.CASE_INSENSITIVE_ORDER));
-                    break;
-                case "za":
-                    barangList.sort(Comparator.comparing(Barang::getNama, String.CASE_INSENSITIVE_ORDER).reversed());
-                    break;
-                case "expensive":
-                    barangList.sort(Comparator.comparing(
+                case "az" -> barangList.sort(Comparator.comparing(Barang::getNama, String.CASE_INSENSITIVE_ORDER));
+                case "za" -> barangList.sort(Comparator.comparing(Barang::getNama, String.CASE_INSENSITIVE_ORDER).reversed());
+                case "expensive" -> barangList.sort(Comparator.comparing(
                         b -> b.getHarga() != null ? b.getHarga().getHarga() : 0,
-                        Comparator.nullsLast(Comparator.reverseOrder())
-                    ));
-                    break;
-                case "cheap":
-                    barangList.sort(Comparator.comparing(
+                        Comparator.nullsLast(Comparator.reverseOrder())));
+                case "cheap" -> barangList.sort(Comparator.comparing(
                         b -> b.getHarga() != null ? b.getHarga().getHarga() : 0,
-                        Comparator.nullsLast(Integer::compareTo)
-                    ));
-                    break;
+                        Comparator.nullsLast(Integer::compareTo)));
             }
         }
         Map<String, Barang> map = new HashMap<>();
@@ -249,20 +214,27 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
         model.addAttribute("query", query);
         model.addAttribute("sort", sort);
         model.addAttribute("filter", filter);
-        model.addAttribute("showSearch", false); // popup tampil setelah pencarian
+        model.addAttribute("showSearch", false);
 
-        return "pages/halamangudangberanda"; // Ganti dengan nama file HTML yang sesuai
-    }
-    @GetMapping("/search/open")
-    public String openSearchPopup(Model model, HttpSession session) {
-        User user = (User) session.getAttribute("loggedInUser");
-        if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
-            return "redirect:/login";
-        }
-        model.addAttribute("showSearch", true); // popup terbuka
-        // Tambahkan data lain jika perlu
-        return "pages/halamangudangberanda";
+        return "redirect:/halamanGudangBeranda";
     }
 
+    @GetMapping("/search/filter")
+    public String showFilterPage(Model model) {
+        List<Barang> allBarang = barangRepository.findAll();
 
+        boolean hasBentuk = allBarang.stream().anyMatch(b -> b.getKategori() != null && b.getKategori().getBentuk() != null && !b.getKategori().getBentuk().isBlank());
+        boolean hasUkuran = allBarang.stream().anyMatch(b -> b.getKategori() != null && b.getKategori().getUkuran() > 0);
+        boolean hasKetebalan = allBarang.stream().anyMatch(b -> b.getKategori() != null && b.getKategori().getKetebalan() != null && !b.getKategori().getKetebalan().isBlank());
+        boolean hasBahan = allBarang.stream().anyMatch(b -> b.getKategori() != null && b.getKategori().getBahan() != null && !b.getKategori().getBahan().isBlank());
+        boolean hasMerek = allBarang.stream().anyMatch(b -> b.getMerek() != null && !b.getMerek().isBlank());
+
+        model.addAttribute("hasBentuk", hasBentuk);
+        model.addAttribute("hasUkuran", hasUkuran);
+        model.addAttribute("hasKetebalan", hasKetebalan);
+        model.addAttribute("hasBahan", hasBahan);
+        model.addAttribute("hasMerek", hasMerek);
+
+        return "redirect:/halamanGudangBeranda"; 
+    }
 }
