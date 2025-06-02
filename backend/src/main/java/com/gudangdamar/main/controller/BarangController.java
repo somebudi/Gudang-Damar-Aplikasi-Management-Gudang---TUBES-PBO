@@ -1,8 +1,11 @@
 package com.gudangdamar.main.controller;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
@@ -220,8 +223,29 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
                     break;
             }
         }
+        Map<String, Barang> map = new HashMap<>();
+        for (Barang b : barangList) {
+            String key = b.getNama() + "|" +
+                b.getKategori().getUkuran() + "|" +
+                b.getKategori().getKetebalan() + "|" +
+                b.getKategori().getBentuk() + "|" +
+                b.getKategori().getBahan() + "|" +
+                b.getKategori().getMerek();
 
-        model.addAttribute("barangList", barangList);
+        if (map.containsKey(key)) {
+            Barang existing = map.get(key);
+            int jumlahLama = existing.getHarga().getJumlah();
+            int jumlahBaru = b.getHarga().getJumlah();
+            existing.getHarga().setJumlah(jumlahLama + jumlahBaru);
+            existing.getHarga().hitungTotalHarga();
+        } else {
+            b.getHarga().hitungTotalHarga();
+            map.put(key, b);
+        }
+    }
+    List<Barang> barangListGrouped = new ArrayList<>(map.values());
+
+        model.addAttribute("barangList", barangListGrouped);
         model.addAttribute("query", query);
         model.addAttribute("sort", sort);
         model.addAttribute("filter", filter);
@@ -229,16 +253,16 @@ public String saveBarang(@ModelAttribute Barang barang, RedirectAttributes redir
 
         return "pages/halamangudangberanda"; // Ganti dengan nama file HTML yang sesuai
     }
-    // @GetMapping("/search/open")
-    // public String openSearchPopup(Model model, HttpSession session) {
-    //     User user = (User) session.getAttribute("loggedInUser");
-    //     if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
-    //         return "redirect:/login";
-    //     }
-    //     model.addAttribute("showSearch", true); // popup terbuka
-    //     // Tambahkan data lain jika perlu
-    //     return "pages/halamangudangberanda";
-    // }
+    @GetMapping("/search/open")
+    public String openSearchPopup(Model model, HttpSession session) {
+        User user = (User) session.getAttribute("loggedInUser");
+        if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
+            return "redirect:/login";
+        }
+        model.addAttribute("showSearch", true); // popup terbuka
+        // Tambahkan data lain jika perlu
+        return "pages/halamangudangberanda";
+    }
 
 
 }

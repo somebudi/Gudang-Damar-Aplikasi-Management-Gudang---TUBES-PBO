@@ -3,24 +3,27 @@
     body {
       font-family: Arial, sans-serif;
     }
+
     .search-button {
-      position:fixed;
+      position: fixed;
       top: 20px;
       right: 20px;
       width: 40px;
       height: 40px;
       border: none;
-      background: none;
+      background: rgb(0, 28, 119);
+      color: white;
+      border-radius: 50%;
+      font-size: 20px;
       cursor: pointer;
       z-index: 100;
-      background-color: rgb(0, 28, 119);
-      padding: 8px 16px;
-      border-radius: 20px;
       transition: background-color 0.2s;
     }
+
     .search-button:hover {
       background-color: #444;
     }
+
     .overlay {
       display: none;
       position: fixed;
@@ -33,9 +36,11 @@
       justify-content: center;
       align-items: center;
     }
+
     .overlay.active {
       display: flex;
     }
+
     .popup-panel {
       background-color: white;
       border-radius: 10px;
@@ -45,10 +50,19 @@
       box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
       animation: fadeIn 0.3s ease;
     }
+
     @keyframes fadeIn {
-      from { transform: scale(0.8); opacity: 0; }
-      to { transform: scale(1); opacity: 1; }
+      from {
+        transform: scale(0.8);
+        opacity: 0;
+      }
+
+      to {
+        transform: scale(1);
+        opacity: 1;
+      }
     }
+
     .search-input {
       width: 100%;
       padding: 10px;
@@ -56,16 +70,21 @@
       border: 1px solid #ccc;
       margin-bottom: 20px;
     }
+
     .button-grid {
       display: flex;
       gap: 20px;
+      flex-wrap: wrap;
     }
+
     .filter-column {
       display: flex;
       flex-direction: column;
       gap: 10px;
     }
-    .filter-button {
+
+    .filter-button,
+    .submit {
       padding: 8px 16px;
       background-color: #dcdcdc;
       border: none;
@@ -73,30 +92,32 @@
       cursor: pointer;
       transition: background-color 0.2s;
     }
+
     .filter-button:hover {
       background-color: #bcbcbc;
     }
+
     .submit {
-      padding: 8px 16px;
       background-color: #66ACE6;
-      border: none;
-      border-radius: 20px;
-      cursor: pointer;
-      transition: background-color 0.2s;
+      color: white;
+    }
+
+    .close-button {
+      margin-top: 20px;
+      background-color: #e06666;
+      color: white;
     }
   </style>
 
   <!-- Tombol Search -->
-  <form th:action="@{/search/open}" method="get" style="display:inline;">
-    <button class="search-button" type="submit" title="Cari"></button>
-  </form>
+  <button class="search-button" id="openSearch" title="Cari">&#128269;</button>
 
   <!-- Overlay dan Popup -->
-  <div class="overlay" id="searchOverlay"></div>
-  
+  <div class="overlay" id="searchOverlay">
     <div class="popup-panel">
       <form th:action="@{/search/result}" method="get">
-        <input type="text" class="search-input" name="query" placeholder="Masukkan nama barang">
+        <input type="text" class="search-input" name="query" placeholder="Masukkan nama barang" th:value="${param.query}" />
+
         <div class="button-grid">
           <div class="filter-column">
             <button class="filter-button" type="submit" name="sort" value="az">Huruf A-Z</button>
@@ -111,50 +132,34 @@
             <button class="filter-button" type="submit" name="filter" value="material">Material</button>
             <button class="filter-button" type="submit" name="filter" value="brand">Brand</button>
           </div>
-          <button type="submit" class="submit">Cari</button>
         </div>
+
+        <button type="submit" class="submit">Cari</button>
       </form>
-      <form th:action="@{/search/close}" method="post" style="margin-top:10px;">
-        <button type="submit" class="filter-button">Tutup</button>
-      </form>
+
+      <button type="button" class="filter-button close-button" id="closeOverlayBtn">Tutup</button>
     </div>
   </div>
-</div>
-<script>
-    // Show overlay when search button is clicked
-    document.addEventListener('DOMContentLoaded', function() {
-      const searchButton = document.querySelector('.search-button');
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const searchButton = document.getElementById('openSearch');
       const overlay = document.getElementById('searchOverlay');
-      const popupPanel = document.querySelector('.popup-panel');
-      
-      // Move popupPanel inside overlay for proper centering
-      if (overlay && popupPanel && !overlay.contains(popupPanel)) {
-        overlay.appendChild(popupPanel);
-      }
+      const closeBtn = document.getElementById('closeOverlayBtn');
 
-      if (searchButton && overlay) {
-        searchButton.addEventListener('click', function(e) {
-          e.preventDefault();
-          overlay.classList.add('active');
-        });
-      }
+      searchButton.addEventListener('click', function () {
+        overlay.classList.add('active');
+      });
 
-      // Close overlay when clicking outside popupPanel
-      if (overlay) {
-        overlay.addEventListener('click', function(e) {
-          if (e.target === overlay) {
-            overlay.classList.remove('active');
-          }
-        });
-      }
-
-      // Close overlay when "Tutup" button is clicked
-      const closeBtn = popupPanel ? popupPanel.querySelector('form[action$="/search/close"] button') : null;
-      if (closeBtn && overlay) {
-        closeBtn.addEventListener('click', function(e) {
-          e.preventDefault();
+      overlay.addEventListener('click', function (e) {
+        if (e.target === overlay) {
           overlay.classList.remove('active');
-        });
-      }
+        }
+      });
+
+      closeBtn.addEventListener('click', function () {
+        overlay.classList.remove('active');
+      });
     });
   </script>
+</div>
