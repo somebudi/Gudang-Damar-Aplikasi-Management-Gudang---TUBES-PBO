@@ -101,12 +101,11 @@
       font-size: 14px;
     }
 
-    /* Tombol Tambah dan Delete */
     .btn-wrapper {
-      display: flex;
-      justify-content: flex-start;
-      gap: 12px;
-      padding: 20px 24px 0;
+      margin-top: 1%;
+      margin-left: 5%;
+      position: fixed;
+      z-index: 1000;
     }
 
     .btn-tambah {
@@ -124,6 +123,37 @@
       position: relative;
       overflow: hidden;
       white-space: nowrap;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .btn-text {
+      display: inline;
+    }
+
+    .btn-icon {
+      display: none;
+      font-size: 20px;
+    }
+
+    @media (max-width: 900px) {
+      .btn-text {
+        display: none;
+      }
+
+      .btn-icon {
+        display: inline;
+      }
+
+      .btn-tambah {
+        padding: 14px;
+        border-radius: 50%;
+        width: 50px;
+        height: 50px;
+        font-size: 20px;
+        justify-content: center;
+      }
     }
 
     .btn-tambah:hover {
@@ -154,9 +184,6 @@
       left: 100%;
     }
 
-    
-
-    /* Responsive */
     @media (max-width: 768px) {
       .card {
         height: 160px;
@@ -183,29 +210,30 @@
   <div th:replace="components/search :: search"></div>
 
   <div class="btn-wrapper">
-  <button type="button" class="btn-tambah" onclick="window.location.href='/barang/tambah'">Tambah Jenis Barang</button>
-</div>
-
+    <button type="button" class="btn-tambah" onclick="window.location.href='/barang/tambah'">
+      <span class="btn-text">Tambah Jenis Barang</span>
+      <span class="btn-icon" aria-hidden="true">+</span>
+    </button>
+  </div>
 
   <main>
     <div class="grid-container">
-  <div class="card" th:each="barang : ${barangList}">
-    <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
-      <div class="card-content">
-        <strong th:text="'Nama: ' + ${barang.nama}"></strong>
-        <p th:text="'Ukuran: ' + ${barang.kategori.ukuran}"></p>
-        <p th:text="'Harga: Rp ' + ${barang.harga.harga}"></p>
-        <p th:text="'Jumlah: ' + ${barang.harga.jumlah}"></p>
-        <p th:text="'Total: Rp ' + ${barang.harga.total}"></p>
+      <div class="card" th:each="barang : ${barangList}">
+        <a th:href="@{halamanGudangDetail/{id}(id=${barang.idBarang})}" class="card-link">
+          <div class="card-content">
+            <strong th:text="'Nama: ' + ${barang.nama}"></strong>
+            <p th:text="'Ukuran: ' + ${barang.kategori.ukuran}"></p>
+            <p th:text="'Harga: Rp ' + ${barang.harga.harga}"></p>
+            <p th:text="'Jumlah: ' + ${barang.harga.jumlah}"></p>
+            <p th:text="'Total: Rp ' + ${barang.harga.total}"></p>
+          </div>
+        </a>
       </div>
-    </a>
-  </div>
-</div>
-
+    </div>
   </main>
 
   <footer>
-    &copy; 2025 DapurKita. All rights reserved.
+    &copy; 2025 GudangDamar. All rights reserved.
   </footer>
 
 </body>
