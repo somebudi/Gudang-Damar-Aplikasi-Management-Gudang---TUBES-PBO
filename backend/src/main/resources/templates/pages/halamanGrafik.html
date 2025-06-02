@@ -111,30 +111,22 @@
 
 
   <div class="main-container">
-    
     <div class="left-section">
         <div class="dropdown-section">
-          <label for="dropdown">Days Moon blabla</label>
-          <select id="dropdown">
-            <option>Opsi 1</option>
-            <option>Opsi 2</option>
-          </select>
+            <h1>Grafik Data Barang</h1>
         </div>
+      
       <div class="chart-box">
         <canvas id="barangChart" width="100" height="50"></canvas>
-        
       </div>
-
-      
-    </div>
+  </div>
 
     
 <div class="right-sidebar">
 <center>
- <form method="get" action="/riwayat" id="filterForm">
+ <form method="get" action="/halamanGrafik" id="filterForm">
   <label class="riwayat-title" for="filter">Filter Riwayat: </label>
   <select class="filter-box" id="filter" name="filter" onchange="document.getElementById('filterForm').submit()">
-    <option value="all" th:selected="${filter == 'all'}">All</option>
     <option value="barang" th:selected="${filter == 'barang'}">Barang</option>
     <option value="servis" th:selected="${filter == 'servis'}">Servis</option>
     <option value="pemesanan" th:selected="${filter == 'pemesanan'}">Pemesanan</option>
@@ -151,55 +143,71 @@
     </small>
   </div>
 </div>
+</div>
+</div>
 </center>
 
 
 
   <script th:inline="javascript">
-    document.addEventListener('DOMContentLoaded', function () {
-      let barangList = /*[[${barangList}]]*/ [];
+  document.addEventListener('DOMContentLoaded', function () {
+    let filter = /*[[${filter}]]*/ 'all';
+    let grafikList = /*[[${grafikList}]]*/ [];
 
-      let labels = [];
-      let quantities = [];
+    let labels = [];
+    let data = [];
+
+    if (filter === 'barang' || filter === 'all') {
       let mapBarang = {};
-
-      for (let i = 0; i < barangList.length; i++) {
-        let nama = barangList[i].nama;
-        let jumlah = barangList[i].harga.jumlah;
+      for (let i = 0; i < grafikList.length; i++) {
+        let nama = grafikList[i].nama || grafikList[i].namaBarang;
+        let jumlah = grafikList[i].harga ? grafikList[i].harga.jumlah : 0;
         mapBarang[nama] = (mapBarang[nama] || 0) + jumlah;
       }
-
       for (let nama in mapBarang) {
         labels.push(`${nama}\u000A(${mapBarang[nama]})`);
-        quantities.push(mapBarang[nama]);
+        data.push(mapBarang[nama]);
       }
+    } else if (filter === 'servis') {
+      for (let i = 0; i < grafikList.length; i++) {
+        let nama = grafikList[i].catatanPemesanan || 'Servis';
+        labels.push(nama);
+        data.push(1); // Atau jumlah lain sesuai kebutuhan
+      }
+    } else if (filter === 'pemesanan') {
+      for (let i = 0; i < grafikList.length; i++) {
+        let nama = grafikList[i].catatanPemesanan || 'Pemesanan';
+        labels.push(nama);
+        data.push(1); // Atau jumlah lain sesuai kebutuhan
+      }
+    }
 
-      let ctx = document.getElementById('barangChart').getContext('2d');
-      new Chart(ctx, {
-        type: 'bar',
-        data: {
-          labels: labels,
-          datasets: [{
-            label: 'Jumlah Barang',
-            data: quantities,
-            backgroundColor: 'rgba(0, 101, 248, 0.5)',
-            borderColor: 'rgba(0, 101, 248, 1)',
-            borderWidth: 1
-          }]
-        },
-        options: {
-          responsive: true,
-          scales: {
-            y: {
-              beginAtZero: true,
-              ticks: {
-                stepSize: 1
-              }
+    let ctx = document.getElementById('barangChart').getContext('2d');
+    new Chart(ctx, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [{
+          label: filter === 'barang' || filter === 'all' ? 'Jumlah Barang' : (filter === 'servis' ? 'Jumlah Servis' : 'Jumlah Pemesanan'),
+          data: data,
+          backgroundColor: 'rgba(0, 101, 248, 0.5)',
+          borderColor: 'rgba(0, 101, 248, 1)',
+          borderWidth: 1
+        }]
+      },
+      options: {
+        responsive: true,
+        scales: {
+          y: {
+            beginAtZero: true,
+            ticks: {
+              stepSize: 1
             }
           }
         }
-      });
+      }
     });
-  </script>
+  });
+</script>
 </body>
 </html>

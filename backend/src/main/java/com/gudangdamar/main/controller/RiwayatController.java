@@ -32,7 +32,7 @@ public class RiwayatController {
         this.pemesananRepository = pemesananRepository;
     }
 
-   @GetMapping("/riwayat")
+@GetMapping("/riwayat")
 public String riwayat(@RequestParam(defaultValue = "all") String filter, Model model, HttpSession session) {
     User user = (User) session.getAttribute("loggedInUser");
     if (user == null || (!"kasir".equalsIgnoreCase(user.getRole()) && !"admin".equalsIgnoreCase(user.getRole()))) {
@@ -41,9 +41,11 @@ public String riwayat(@RequestParam(defaultValue = "all") String filter, Model m
     }
 
     List<RiwayatItem> riwayatList = new ArrayList<>();
+    List<?> grafikList = new ArrayList<>();;
 
    if (filter.equals("all") || filter.equals("barang")) {
     List<Barang> barangList = barangRepository.findAll();
+    grafikList = barangList;
     for (Barang b : barangList) {
         String kategoriDesc = "Kategori tidak diketahui";
         if (b.getKategori() != null) {
@@ -67,6 +69,7 @@ public String riwayat(@RequestParam(defaultValue = "all") String filter, Model m
 
     if (filter.equals("all") || filter.equals("servis")) {
         List<Servis> servisList = servisRepository.findAll();
+        grafikList = servisList;
         for (Servis s : servisList) {
             String deskripsi = "Servis: " + Optional.ofNullable(s.getCatatanPemesanan()).orElse("Tanpa catatan");
             riwayatList.add(new RiwayatItem(deskripsi, s.getTanggalMulaiServis(), s.getTanggalSelesaiServis()));
@@ -79,6 +82,7 @@ public String riwayat(@RequestParam(defaultValue = "all") String filter, Model m
 
     if (filter.equals("all") || filter.equals("pemesanan")) {
         List<Pemesanan> pemesananList = pemesananRepository.findAll();
+        grafikList = pemesananList;
         for (Pemesanan p : pemesananList) {
             String deskripsi = "Pemesanan: " + Optional.ofNullable(p.getCatatanPemesanan()).orElse("Tanpa catatan");
             riwayatList.add(new RiwayatItem(deskripsi, p.getTanggalPemesanan(), p.getTanggalTerkirim()));
@@ -104,14 +108,11 @@ public String riwayat(@RequestParam(defaultValue = "all") String filter, Model m
     withDate.addAll(withoutDate);
 
     model.addAttribute("riwayatList", withDate);
+    model.addAttribute("grafikList", grafikList);
     model.addAttribute("filter", filter);
 
     return "pages/halamanGrafik";
 }
-
-
-
-
     public static class RiwayatItem {
         private final String deskripsi;
         private final Date waktuMulai;
