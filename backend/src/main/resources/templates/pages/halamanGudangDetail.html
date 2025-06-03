@@ -250,6 +250,21 @@
     }
   </script>
   <script th:src="@{/scripts/beranda.js}" type="module"></script>
+  <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+
+  <div th:if="${jumlahBerhasil}">/* sweetalert*/
+  <script th:inline="javascript">
+    Swal.fire({
+      title: 'Jumlah barang berhasil diubah!',
+      text: 'Jumlah berhasil ditambahkan.',
+      imageUrl: '/gambar/jempol.jpg',
+      imageWidth: 150,
+      imageHeight: 150,
+      imageAlt: 'Berhasil'
+    });
+
+  </script>
+</div>
   <footer>
     &copy; 2025 GudangDamar. All rights reserved.
   </footer>

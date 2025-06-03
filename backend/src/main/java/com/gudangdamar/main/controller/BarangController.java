@@ -128,6 +128,7 @@ public class BarangController {
         barangRepository.save(barang);
 
         redirectAttributes.addFlashAttribute("success", "Jumlah barang berhasil diperbarui.");
+        redirectAttributes.addFlashAttribute("jumlahBerhasil",true);
         return "redirect:/halamanGudangDetail/" + id;
     }
 
