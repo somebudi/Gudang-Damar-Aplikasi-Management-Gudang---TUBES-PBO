@@ -61,5 +61,23 @@ public class PemesananController {
         model.addAttribute("pemesanan", pemesanan);
         return "pages/formEditPesanan";
     }
+    @PostMapping("pemesanan/update/{id}")
+public String updatePemesanan(@PathVariable Long id,
+                              @ModelAttribute("pemesanan") Pemesanan pemesananUpdate,
+                              RedirectAttributes redirectAttributes) {
+    Pemesanan existingPemesanan = pemesananRepository.findById(id).orElse(null);
+    if (existingPemesanan == null) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Data pemesanan tidak ditemukan.");
+        return "redirect:/halamanGudangPesanan";
+    }
+
+    // Update field yang diizinkan diubah, misalnya catatanPemesanan
+    existingPemesanan.setCatatanPemesanan(pemesananUpdate.getCatatanPemesanan());
+    // Jika ada field lain yang bisa diubah, tambahkan di sini
+
+    pemesananRepository.save(existingPemesanan);
+    redirectAttributes.addFlashAttribute("successMessage", "Data pemesanan berhasil diperbarui.");
+    return "redirect:/halamanGudangPesanan";
+}
 
 }
