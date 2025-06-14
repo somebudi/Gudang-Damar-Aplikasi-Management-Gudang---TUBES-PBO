@@ -65,5 +65,22 @@ public class ServisController {
         model.addAttribute("servis", servis);
         return "pages/formEditServis";
     }
+    @PostMapping("servis/update/{id}")
+public String updateServis(@PathVariable Long id,
+                           @ModelAttribute("servis") Servis servisUpdate,
+                           RedirectAttributes redirectAttributes) {
+    Servis existingServis = servisRepository.findById(id).orElse(null);
+    if (existingServis == null) {
+        redirectAttributes.addFlashAttribute("errorMessage", "Data servis tidak ditemukan.");
+        return "redirect:/halamanGudangServis";
+    }
+
+
+    existingServis.setCatatanPemesanan(servisUpdate.getCatatanPemesanan());
+
+    servisRepository.save(existingServis);
+    redirectAttributes.addFlashAttribute("successMessage", "Data servis berhasil diperbarui.");
+    return "redirect:/halamanGudangServis";
+}
 
 }
